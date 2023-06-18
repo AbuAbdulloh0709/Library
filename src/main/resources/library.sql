@@ -5,6 +5,7 @@ CREATE TABLE "users"
     "last_name"       varchar(30),
     "passport_number" varchar(20),
     "email"           varchar(60),
+    login             varchar(20),
     "password"        varchar(20),
     "role"            varchar(20),
     "address"         varchar(70),

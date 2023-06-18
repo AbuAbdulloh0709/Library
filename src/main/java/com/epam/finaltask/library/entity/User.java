@@ -1,5 +1,7 @@
 package com.epam.finaltask.library.entity;
 
+import com.epam.finaltask.library.entity.enums.UserRole;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -8,21 +10,23 @@ public class User extends AbstractEntity {
     private String lastName;
     private String passportNumber;
     private String email;
+    private String login;
     private String password;
-    private String role;
+    private UserRole role;
     private String address;
-    private Date birthDate;
+    private String birthDate;
     private String status;
 
     public User() {
     }
 
-    public User(int id, Timestamp createdAt, String firstName, String lastName, String passportNumber, String email, String password, String role, String address, Date birthDate, String status) {
+    public User(int id, Timestamp createdAt, String firstName, String lastName, String passportNumber, String email, String login, String password, UserRole role, String address, String birthDate, String status) {
         super(id, createdAt);
         this.firstName = firstName;
         this.lastName = lastName;
         this.passportNumber = passportNumber;
         this.email = email;
+        this.login = login;
         this.password = password;
         this.role = role;
         this.address = address;
@@ -62,6 +66,14 @@ public class User extends AbstractEntity {
         this.email = email;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -70,11 +82,11 @@ public class User extends AbstractEntity {
         this.password = password;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -86,11 +98,11 @@ public class User extends AbstractEntity {
         this.address = address;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 
