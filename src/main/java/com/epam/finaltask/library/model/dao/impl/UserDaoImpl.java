@@ -4,6 +4,7 @@ import com.epam.finaltask.library.entity.User;
 import com.epam.finaltask.library.entity.enums.UserRole;
 import com.epam.finaltask.library.exception.DaoException;
 import com.epam.finaltask.library.model.dao.UserDao;
+import com.epam.finaltask.library.model.mapper.impl.UserMapper;
 import com.epam.finaltask.library.model.pool.ConnectionPool;
 
 import java.sql.PreparedStatement;
@@ -13,13 +14,27 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.finaltask.library.model.dao.ColumnName.USER_PASSWORD;
+
 public class UserDaoImpl extends UserDao {
 
-    private static final String SQL_INSERT_USER = "INSERT INTO users(login, first_name, last_name, passport_number, email, role, address, birth_date, status) " +
-            "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_INSERT_USER = "INSERT INTO users(login, first_name, last_name, passport_number, email, role, address, birth_date, status, phone_number) " +
+            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private static final String SQL_SELECT_USERS_BY_LOGIN =
+            "SELECT * FROM users WHERE login = ?";
+
+    private static final String SQL_SELECT_USERS_BY_EMAIL =
+            "SELECT * FROM users WHERE email = ?";
+
+    private static final String SQL_SELECT_USER_PASSWORD = "SELECT password FROM users WHERE login = ?";
+
+    private static final String SQL_UPDATE_USER_PASSWORD = "UPDATE users SET password = ? WHERE login = ?";
 
 
-    public UserDaoImpl(){}
+
+    public UserDaoImpl() {
+    }
 
     public UserDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
@@ -38,7 +53,8 @@ public class UserDaoImpl extends UserDao {
             prepareStatement.setString(6, user.getRole().getRole());
             prepareStatement.setString(7, user.getAddress());
             prepareStatement.setString(8, user.getBirthDate());
-            prepareStatement.setString(9, user.getStatus());
+            prepareStatement.setString(9, user.getStatus().getStatus());
+            prepareStatement.setString(10, user.getPhoneNumber().toString());
             prepareStatement.execute();
             ResultSet resultSet = prepareStatement.getGeneratedKeys();
             resultSet.next();
@@ -71,7 +87,18 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public Optional<User> findUserByLogin(String login) throws DaoException {
-        return Optional.empty();
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_LOGIN)) {
+            preparedStatement.setString(1, login);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding user by login: " + exception);
+            throw new DaoException("Error has occurred while finding user by login: ", exception);
+        }
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
     @Override
@@ -81,7 +108,18 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public Optional<User> findUserByEmail(String email) throws DaoException {
-        return Optional.empty();
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_EMAIL)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding user by email: " + exception);
+            throw new DaoException("Error has occurred while finding user by email: ", exception);
+        }
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
     @Override
@@ -97,5 +135,33 @@ public class UserDaoImpl extends UserDao {
     @Override
     public List<User> findUsersByRole(UserRole userRole, int startElementNumber) throws DaoException {
         return null;
+    }
+
+    @Override
+    public Optional<String> findUserPassword(String login) throws DaoException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USER_PASSWORD)) {
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(resultSet.getString(USER_PASSWORD));
+            }
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding user password: " + sqlException);
+            throw new DaoException("Error has occurred while finding user password: ", sqlException);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public boolean updateUserPassword(String password, String login) throws DaoException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_USER_PASSWORD)) {
+            preparedStatement.setString(1, password);
+            preparedStatement.setString(2, login);
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while updating user password: " + exception);
+            throw new DaoException("Error has occurred while updating user password: ", exception);
+        }
     }
 }

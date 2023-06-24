@@ -1,7 +1,9 @@
 package com.epam.finaltask.library.entity;
 
 import com.epam.finaltask.library.entity.enums.UserRole;
+import com.epam.finaltask.library.entity.enums.UserStatus;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -15,12 +17,13 @@ public class User extends AbstractEntity {
     private UserRole role;
     private String address;
     private String birthDate;
-    private String status;
+    private UserStatus status;
+    private BigInteger phoneNumber;
 
     public User() {
     }
 
-    public User(int id, Timestamp createdAt, String firstName, String lastName, String passportNumber, String email, String login, String password, UserRole role, String address, String birthDate, String status) {
+    public User(int id, Timestamp createdAt, String firstName, String lastName, String passportNumber, String email, String login, String password, UserRole role, String address, String birthDate, UserStatus status) {
         super(id, createdAt);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -106,11 +109,19 @@ public class User extends AbstractEntity {
         this.birthDate = birthDate;
     }
 
-    public String getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
+    }
+
+    public void setPhoneNumber(BigInteger phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public BigInteger getPhoneNumber() {
+        return phoneNumber;
     }
 }

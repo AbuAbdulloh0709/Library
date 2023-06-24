@@ -22,4 +22,7 @@ public abstract class UserDao extends BaseDao<Integer, User> {
     abstract public List<User> findUsersByRole(UserRole userRole, int startElementNumber) throws DaoException;
 
 
+    public abstract Optional<String> findUserPassword(String login) throws DaoException;
+
+    abstract public boolean updateUserPassword(String password, String login) throws DaoException;
 }

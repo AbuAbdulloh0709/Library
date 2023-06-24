@@ -20,6 +20,7 @@ public final class ColumnName {
     public static final String USER_ADDRESS = "address";
     public static final String USER_BIRTH_DATE = "birth_date";
     public static final String USER_STATUS = "status";
+    public static final String USER_PHONE_NUMBER = "phone_number";
 
     /**
      * the constants for the books table
