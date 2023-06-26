@@ -1,8 +1,9 @@
 package com.epam.finaltask.library.controller.command.impl;
 
 import com.epam.finaltask.library.controller.command.Command;
-import com.epam.finaltask.library.controller.command.impl.go_to.GoToSignInCommand;
-import com.epam.finaltask.library.controller.command.impl.go_to.GoToSignUpCommand;
+import com.epam.finaltask.library.controller.command.impl.administrator.AddNewAdministratorCommand;
+import com.epam.finaltask.library.controller.command.impl.administrator.AddNewLibrarianCommand;
+import com.epam.finaltask.library.controller.command.impl.go_to.*;
 import com.epam.finaltask.library.controller.command.impl.signing.SignInCommand;
 import com.epam.finaltask.library.controller.command.impl.signing.SignUpCommand;
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +14,23 @@ public enum CommandType {
     GO_TO_SIGN_IN(new GoToSignInCommand()),
     GO_TO_ADMIN(new GoToSignInCommand()),
 
+    GO_TO_DASHBOARD(new GoToDashboardCommand()),
+    GO_TO_ADMINISTRATORS(new GoToAdministratorsCommand()),
+    GO_TO_LIBRARIANS(new GoToLibrariansCommand()),
+    GO_TO_ALL_WAITING_STUDENTS(new GoToAllWaitingStudentsCommand()),
+    GO_TO_ALL_APPROVED_STUDENTS(new GoToApprovedStudentsCommand()),
+    GO_TO_ALL_BOOKS(new GoToAllBooksCommand()),
+    GO_TO_ADD_BOOK_GENRE(new GoToAddBookGenreCommand()),
+    GO_TO_ADD_BOOKS(new GoToAddBookCommand()),
+    GO_TO_ISSUE_RETURN_BOOKS(new GoToIssueReturnBooksCommand()),
+    GO_TO_ISSUED_BOOKS(new GoToIssuedBooksCommand()),
+
+
+
     SIGN_UP(new SignUpCommand()),
     SIGN_IN(new SignInCommand()),
+    ADD_ADMINISTRATOR(new AddNewAdministratorCommand()),
+    ADD_LIBRARIAN(new AddNewLibrarianCommand()),
     DEFAULT(new DefaultCommand());
 
 

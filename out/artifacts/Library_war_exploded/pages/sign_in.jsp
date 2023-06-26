@@ -5,7 +5,7 @@
 <fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
-    <link rel="stylesheet" href="css_new/sign_up.css" type="text/css">
+    <link rel="stylesheet" href="css/sign_up.css" type="text/css">
 </head>
 <%
     String role = (String) request.getSession().getAttribute("role");

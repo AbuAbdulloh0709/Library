@@ -3,6 +3,8 @@ package com.epam.finaltask.library.controller.command.impl.signing;
 import com.epam.finaltask.library.controller.command.Command;
 import com.epam.finaltask.library.controller.command.PagePath;
 import com.epam.finaltask.library.controller.command.Router;
+import com.epam.finaltask.library.entity.enums.UserRole;
+import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.exception.ServiceException;
 import com.epam.finaltask.library.model.service.UserService;
 import com.epam.finaltask.library.model.service.impl.UserServiceImpl;
@@ -53,7 +55,7 @@ public class SignUpCommand implements Command {
                 session.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
-            if (userService.registerUser(userData)) {
+            if (userService.registerUser(userData, UserRole.STUDENT, UserStatus.INACTIVE)) {
                 request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
                 return new Router(PagePath.HOME, Router.RouterType.FORWARD);
             } else {

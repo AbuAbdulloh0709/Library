@@ -4,7 +4,7 @@ import com.epam.finaltask.library.entity.User;
 import com.epam.finaltask.library.entity.enums.UserRole;
 import com.epam.finaltask.library.exception.DaoException;
 import com.epam.finaltask.library.model.dao.impl.UserDaoImpl;
-import com.epam.finaltask.library.model.mapper.impl.UserMapper;
+import com.epam.finaltask.library.model.dao.mapper.impl.UserMapper;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;

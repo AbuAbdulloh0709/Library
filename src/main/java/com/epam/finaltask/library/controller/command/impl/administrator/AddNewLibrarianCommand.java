@@ -1,0 +1,79 @@
+package com.epam.finaltask.library.controller.command.impl.administrator;
+
+import com.epam.finaltask.library.controller.command.Command;
+import com.epam.finaltask.library.controller.command.PagePath;
+import com.epam.finaltask.library.controller.command.Router;
+import com.epam.finaltask.library.entity.User;
+import com.epam.finaltask.library.entity.enums.UserRole;
+import com.epam.finaltask.library.entity.enums.UserStatus;
+import com.epam.finaltask.library.exception.ServiceException;
+import com.epam.finaltask.library.model.service.UserService;
+import com.epam.finaltask.library.model.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.epam.finaltask.library.controller.command.RequestParameter.*;
+import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.*;
+
+public class AddNewLibrarianCommand implements Command {
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String SIGN_UP_CONFIRM_MESSAGE_KEY = "confirm.sign_up";
+    private static final String SIGN_UP_ERROR_MESSAGE_KEY = "error.sign_up";
+    private static final String LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY = "error.login_availability";
+    private static final String EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY = "error.email_availability";
+    private final UserService userService = UserServiceImpl.getInstance();
+
+    @Override
+    public Router execute(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Map<String, String> userData = new HashMap<>();
+        userData.put(LOGIN, request.getParameter(LOGIN));
+        userData.put(EMAIL, request.getParameter(EMAIL));
+        userData.put(PASSWORD, request.getParameter(PASSWORD));
+        userData.put(REPEATED_PASSWORD, request.getParameter(REPEATED_PASSWORD));
+        userData.put(FIRSTNAME, request.getParameter(FIRSTNAME));
+        userData.put(LASTNAME, request.getParameter(LASTNAME));
+        userData.put(BIRTH_DATE, request.getParameter(BIRTH_DATE));
+        userData.put(PHONE_NUMBER, request.getParameter(PHONE_NUMBER));
+        userData.put(PASSPORT_NUMBER, request.getParameter(PASSPORT_NUMBER));
+        userData.put(ADDRESS, request.getParameter(ADDRESS));
+
+        List<User> librarians = null;
+
+        try {
+            if (userService.isEmailOccupied(userData.get(EMAIL))) {
+                librarians = userService.findUsers(UserRole.ADMIN);
+                request.setAttribute(PagePath.LIBRARIANS, librarians);
+                request.setAttribute(USER, userData);
+                request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
+            }
+            if (userService.isLoginOccupied(userData.get(LOGIN))) {
+                librarians = userService.findUsers(UserRole.ADMIN);
+                request.setAttribute(PagePath.LIBRARIANS, librarians);
+                request.setAttribute(USER, userData);
+                request.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
+            }
+            if (userService.registerUser(userData, UserRole.LIBRARIAN, UserStatus.ACTIVE)) {
+//                request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
+                librarians = userService.findUsers(UserRole.LIBRARIAN);
+                request.setAttribute(PagePath.LIBRARIANS, librarians);
+                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
+            } else {
+                request.setAttribute(USER, userData);
+                request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);
+                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
+            }
+        } catch (ServiceException e) {
+            LOGGER.error("Error has occurred while signing in: " + e);
+            return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
+        }
+    }
+}

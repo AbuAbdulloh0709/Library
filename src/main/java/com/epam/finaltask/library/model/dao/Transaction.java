@@ -58,8 +58,11 @@ public class Transaction {
     public void end() throws DaoException {
         if (connection != null) {
             try {
-                connection.close();
+                if (!connection.isClosed()) {
+                    connection.close();
+                }
                 connection.setAutoCommit(true);
+
             } catch (SQLException sqlException) {
                 LOGGER.error("Error has occurred while ending transaction rollback: " + sqlException);
                 throw new DaoException("Error has occurred while ending transaction rollback: ");

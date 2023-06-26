@@ -10,6 +10,7 @@ import com.epam.finaltask.library.model.dao.Transaction;
 import com.epam.finaltask.library.model.dao.UserDao;
 import com.epam.finaltask.library.model.service.UserService;
 import com.epam.finaltask.library.util.PasswordEncoder;
+import com.epam.finaltask.library.util.PhoneNumberFormatter;
 import com.epam.finaltask.library.validator.UserValidator;
 import com.epam.finaltask.library.validator.impl.UserValidatorImpl;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -74,8 +76,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<User, String> findUsers(UserRole userRole) throws ServiceException {
-        return null;
+    public List<User> findUsers(UserRole userRole) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            return userDao.findUsersByRole(userRole);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding users: " + exception);
+            throw new ServiceException("Error has occurred while finding users: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
     }
 
     @Override
@@ -88,14 +99,8 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-//    public static void main(String[] args) throws ServiceException {
-//        System.out.println(instance.registerUser(new HashMap<>(Map.of(LOGIN, "abuabdulloh0709", PASSWORD, "password", REPEATED_PASSWORD, "password",
-//                FIRSTNAME, "Muslimbek", LASTNAME, "Soliyev", EMAIL, "AbuAbdulloh0709@gmail.com", BIRTH_DATE, "2000-07-09",
-//                PHONE_NUMBER, "+998(91)654-19-77", PASSPORT_NUMBER, "AA9156895", ADDRESS, "Yoshlik St. 45"))));
-//    }
-
     @Override
-    public boolean registerUser(Map<String, String> userData) throws ServiceException {
+    public boolean registerUser(Map<String, String> userData, UserRole userRole, UserStatus userStatus) throws ServiceException {
         DaoProvider daoProvider = DaoProvider.getInstance();
         UserDao userDao = daoProvider.getUserDao(true);
         UserValidator validator = UserValidatorImpl.getInstance();
@@ -117,10 +122,10 @@ public class UserServiceImpl implements UserService {
                     user.setLastName(userData.get(LASTNAME));
                     user.setPassportNumber(userData.get(PASSPORT_NUMBER));
                     user.setEmail(userData.get(EMAIL));
-                    user.setRole(UserRole.STUDENT);
+                    user.setRole(userRole);
                     user.setAddress(userData.get(ADDRESS));
                     user.setBirthDate(userData.get(BIRTH_DATE));
-                    user.setStatus(UserStatus.INACTIVE);
+                    user.setStatus(userStatus);
                     user.setLogin(userData.get(LOGIN));
                     user.setPassword(userData.get(LOGIN));
                     user.setPhoneNumber(number);

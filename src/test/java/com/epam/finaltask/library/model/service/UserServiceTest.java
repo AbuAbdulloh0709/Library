@@ -1,6 +1,8 @@
 package com.epam.finaltask.library.model.service;
 
 import com.epam.finaltask.library.entity.User;
+import com.epam.finaltask.library.entity.enums.UserRole;
+import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.exception.DaoException;
 import com.epam.finaltask.library.exception.ServiceException;
 import com.epam.finaltask.library.model.dao.DaoProvider;
@@ -79,7 +81,7 @@ public class UserServiceTest {
         doNothing().when(transaction).commit();
         doNothing().when(transaction).end();
 
-        boolean actual = userService.registerUser(userData);
+        boolean actual = userService.registerUser(userData, UserRole.STUDENT, UserStatus.INACTIVE);
         Assert.assertFalse(actual);
     }
 

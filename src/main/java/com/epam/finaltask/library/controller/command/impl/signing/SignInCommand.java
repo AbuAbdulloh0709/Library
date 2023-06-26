@@ -42,7 +42,7 @@ public class SignInCommand implements Command {
                 session.setAttribute(SessionAttribute.USER, user.get());
                 session.setAttribute(SessionAttribute.ROLE, user.get().getRole().getRole());
                 if (user.get().getRole().equals(UserRole.ADMIN))
-                    return new Router(PagePath.ADMIN, Router.RouterType.REDIRECT);
+                    return new Router(PagePath.DASHBOARD, Router.RouterType.REDIRECT);
                 else
                     return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
             } else {

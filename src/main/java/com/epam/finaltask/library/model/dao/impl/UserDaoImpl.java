@@ -4,7 +4,7 @@ import com.epam.finaltask.library.entity.User;
 import com.epam.finaltask.library.entity.enums.UserRole;
 import com.epam.finaltask.library.exception.DaoException;
 import com.epam.finaltask.library.model.dao.UserDao;
-import com.epam.finaltask.library.model.mapper.impl.UserMapper;
+import com.epam.finaltask.library.model.dao.mapper.impl.UserMapper;
 import com.epam.finaltask.library.model.pool.ConnectionPool;
 
 import java.sql.PreparedStatement;
@@ -31,6 +31,8 @@ public class UserDaoImpl extends UserDao {
 
     private static final String SQL_UPDATE_USER_PASSWORD = "UPDATE users SET password = ? WHERE login = ?";
 
+    private static final String SQL_SELECT_ALL_USERS_BY_ROLE =
+            "SELECT * from users WHERE role = ?";
 
 
     public UserDaoImpl() {
@@ -129,7 +131,17 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public List<User> findUsersByRole(UserRole userRole) throws DaoException {
-        return null;
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_USERS_BY_ROLE)) {
+            preparedStatement.setString(1, userRole.getRole());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            UserMapper userMapper = UserMapper.getInstance();
+            users = userMapper.retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding users by role: " + sqlException);
+            throw new DaoException("Error has occurred while finding users by role: ", sqlException);
+        }
+        return users;
     }
 
     @Override
