@@ -189,4 +189,22 @@ public class UserServiceImpl implements UserService {
             userDao.closeConnection();
         }
     }
+
+    @Override
+    public List<User> getWaitingStudents(int page) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        int startElementNumber = page * 15 - 15;
+        List<User> students;
+        try {
+            System.out.println(startElementNumber+" start");
+            students = userDao.getUsersByRoleAndStatus(UserRole.STUDENT, UserStatus.INACTIVE, startElementNumber);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding waiting students: " + exception);
+            throw new ServiceException("Error has occurred while finding waiting students: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+        return students;
+    }
 }

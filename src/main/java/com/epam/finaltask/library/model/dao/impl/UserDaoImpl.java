@@ -2,15 +2,13 @@ package com.epam.finaltask.library.model.dao.impl;
 
 import com.epam.finaltask.library.entity.User;
 import com.epam.finaltask.library.entity.enums.UserRole;
+import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.exception.DaoException;
 import com.epam.finaltask.library.model.dao.UserDao;
 import com.epam.finaltask.library.model.dao.mapper.impl.UserMapper;
 import com.epam.finaltask.library.model.pool.ConnectionPool;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +31,9 @@ public class UserDaoImpl extends UserDao {
 
     private static final String SQL_SELECT_ALL_USERS_BY_ROLE =
             "SELECT * from users WHERE role = ?";
+
+    private static final String SQL_SELECT_USERS_BY_ROLE_AND_STATUS =
+            "SELECT * from users WHERE role = ? and status = ? LIMIT 15 OFFSET ?";
 
 
     public UserDaoImpl() {
@@ -176,4 +177,23 @@ public class UserDaoImpl extends UserDao {
             throw new DaoException("Error has occurred while updating user password: ", exception);
         }
     }
+
+    @Override
+    public List<User> getUsersByRoleAndStatus(UserRole role, UserStatus status, int startElementNumber) throws DaoException {
+        List<User> users;
+//        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_ROLE_AND_STATUS)) {
+            preparedStatement.setString(1, role.getRole());
+            preparedStatement.setString(2, status.getStatus());
+            preparedStatement.setInt(3, startElementNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            users = UserMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding users by role and status: " + sqlException);
+            throw new DaoException("Error has occurred while finding users by role and status: ", sqlException);
+        }
+        return users;
+    }
+
+
 }

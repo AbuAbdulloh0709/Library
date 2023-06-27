@@ -31,5 +31,7 @@ public interface UserService {
 
     boolean isEmailOccupied(String email) throws ServiceException;
 
+    List<User> getWaitingStudents(int page) throws ServiceException;
+
 
 }

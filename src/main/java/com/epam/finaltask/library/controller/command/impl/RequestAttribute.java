@@ -16,4 +16,10 @@ public final class RequestAttribute {
     public static final String ADMINISTRATORS = "administrators";
 
     public static final String LIBRARIANS = "librarians";
+
+    public static final String WAITING_STUDENTS = "waiting_students";
+
+    public static final String PAGE = "page";
+
+    public static final String LAST = "last";
 }

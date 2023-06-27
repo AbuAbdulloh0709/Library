@@ -76,6 +76,22 @@ section {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
+.previous-button,
+.next-button {
+    display: inline-block;
+    padding: 8px 16px;
+    text-decoration: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.previous-button:hover,
+.next-button:hover {
+    background-color: #45a049;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

@@ -2,6 +2,7 @@ package com.epam.finaltask.library.model.dao;
 
 import com.epam.finaltask.library.entity.User;
 import com.epam.finaltask.library.entity.enums.UserRole;
+import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.exception.DaoException;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public abstract class UserDao extends BaseDao<Integer, User> {
     public abstract Optional<String> findUserPassword(String login) throws DaoException;
 
     abstract public boolean updateUserPassword(String password, String login) throws DaoException;
+
+    abstract public List<User> getUsersByRoleAndStatus(UserRole role, UserStatus status, int startElementNumber) throws DaoException;
 }
