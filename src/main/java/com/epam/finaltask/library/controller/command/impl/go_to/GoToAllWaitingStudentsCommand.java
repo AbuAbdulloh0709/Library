@@ -25,14 +25,11 @@ public class GoToAllWaitingStudentsCommand implements Command {
     public Router execute(HttpServletRequest request) {
         int page;
 
-        System.out.println(request.getParameter(RequestParameter.PAGE));
-
         if (request.getParameter(RequestParameter.PAGE) == null) {
             page = DEFAULT_PAGE;
         } else {
             page = Integer.parseInt(request.getParameter(RequestParameter.PAGE));
         }
-        System.out.println(page);
         try {
             List<User> students = userService.getWaitingStudents(page);
             List<User> nextStudents = userService.getWaitingStudents(page + 1);

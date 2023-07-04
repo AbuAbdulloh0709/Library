@@ -33,5 +33,10 @@ public interface UserService {
 
     List<User> getWaitingStudents(int page) throws ServiceException;
 
+    List<User> getAllStudents(int page) throws ServiceException;
+
+    List<User> searchStudents(UserStatus userStatus, String search, int page) throws ServiceException;
+
+    boolean changeUserStatus(int id, UserStatus userStatus) throws ServiceException;
 
 }

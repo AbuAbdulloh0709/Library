@@ -10,6 +10,7 @@
 <c:set var="librarian" value="inactive"/>
 <c:set var="waiting_students" value="inactive"/>
 <c:set var="approved_students" value="inactive"/>
+<c:set var="all_students" value="inactive"/>
 <c:set var="all_books" value="inactive"/>
 <c:set var="book_genre" value="inactive"/>
 <c:set var="add_books" value="inactive"/>
@@ -31,6 +32,9 @@
     </c:when>
     <c:when test="${currentPath.contains('all_approved_students.jsp')}">
         <c:set var="approved_students" value="active"/>
+    </c:when>
+       <c:when test="${currentPath.contains('all_students.jsp')}">
+        <c:set var="all_students" value="active"/>
     </c:when>
     <c:when test="${currentPath.contains('all_books_in_library.jsp')}">
         <c:set var="all_books" value="active"/>
@@ -66,14 +70,19 @@
                 <fmt:message key="admin.dashboard.librarians"/>
             </a>
         </li>
+<%--        <li>--%>
+<%--            <a class="${waiting_students}" href="${pageContext.request.contextPath}/controller?command=go_to_all_waiting_students">--%>
+<%--                <fmt:message key="admin.dashboard.all_waiting_students"/>--%>
+<%--            </a>--%>
+<%--        </li>--%>
+<%--        <li>--%>
+<%--            <a class="${approved_students}" href="${pageContext.request.contextPath}/controller?command=go_to_all_approved_students">--%>
+<%--                <fmt:message key="admin.dashboard.all_approved_students"/>--%>
+<%--            </a>--%>
+<%--        </li>--%>
         <li>
-            <a class="${waiting_students}" href="${pageContext.request.contextPath}/controller?command=go_to_all_waiting_students">
-                <fmt:message key="admin.dashboard.all_waiting_students"/>
-            </a>
-        </li>
-        <li>
-            <a class="${approved_students}" href="${pageContext.request.contextPath}/controller?command=go_to_all_approved_students">
-                <fmt:message key="admin.dashboard.all_approved_students"/>
+            <a class="${all_students}" href="${pageContext.request.contextPath}/controller?command=go_to_all_students">
+                <fmt:message key="admin.dashboard.all_students"/>
             </a>
         </li>
         <li>

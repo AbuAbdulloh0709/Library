@@ -22,10 +22,20 @@ public abstract class UserDao extends BaseDao<Integer, User> {
 
     abstract public List<User> findUsersByRole(UserRole userRole, int startElementNumber) throws DaoException;
 
-
     public abstract Optional<String> findUserPassword(String login) throws DaoException;
 
     abstract public boolean updateUserPassword(String password, String login) throws DaoException;
 
     abstract public List<User> getUsersByRoleAndStatus(UserRole role, UserStatus status, int startElementNumber) throws DaoException;
+
+    abstract public List<User> getUsersByRole(UserRole role, int startElementNumber) throws DaoException;
+
+    abstract public List<User> searchUsersByRoleAndStatusAndQuery(UserRole role, UserStatus userStatus, String search, int startElementNumber) throws DaoException;
+
+    abstract public List<User> searchUsersByRoleAndQuery(UserRole role, String search, int startElementNumber) throws DaoException;
+
+    abstract public List<User> searchUsersByRoleAndStatus(UserRole role, UserStatus userStatus, int startElementNumber) throws DaoException;
+
+    abstract public boolean changeUserStatus(int id, UserStatus status) throws DaoException;
+
 }

@@ -18,8 +18,17 @@ public final class RequestAttribute {
     public static final String LIBRARIANS = "librarians";
 
     public static final String WAITING_STUDENTS = "waiting_students";
+    public static final String ALL_STUDENTS = "all_students";
 
     public static final String PAGE = "page";
 
     public static final String LAST = "last";
+
+    public static final String STATUS = "status";
+
+    public static final String SEARCH_TEXT = "search_text";
+
+    public static final String GENRES = "genres";
+    public static final String ID = "id";
+    public static final String GENRE_NAME = "name";
 }

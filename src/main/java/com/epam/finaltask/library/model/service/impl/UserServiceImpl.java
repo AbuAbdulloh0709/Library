@@ -10,14 +10,12 @@ import com.epam.finaltask.library.model.dao.Transaction;
 import com.epam.finaltask.library.model.dao.UserDao;
 import com.epam.finaltask.library.model.service.UserService;
 import com.epam.finaltask.library.util.PasswordEncoder;
-import com.epam.finaltask.library.util.PhoneNumberFormatter;
 import com.epam.finaltask.library.validator.UserValidator;
 import com.epam.finaltask.library.validator.impl.UserValidatorImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -197,7 +195,6 @@ public class UserServiceImpl implements UserService {
         int startElementNumber = page * 15 - 15;
         List<User> students;
         try {
-            System.out.println(startElementNumber+" start");
             students = userDao.getUsersByRoleAndStatus(UserRole.STUDENT, UserStatus.INACTIVE, startElementNumber);
         } catch (DaoException exception) {
             LOGGER.error("Error has occurred while finding waiting students: " + exception);
@@ -206,5 +203,61 @@ public class UserServiceImpl implements UserService {
             userDao.closeConnection();
         }
         return students;
+    }
+
+    @Override
+    public List<User> getAllStudents(int page) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        int startElementNumber = page * 15 - 15;
+        List<User> students;
+        try {
+            students = userDao.getUsersByRole(UserRole.STUDENT, startElementNumber);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding all students: " + exception);
+            throw new ServiceException("Error has occurred while finding all students: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+        return students;
+    }
+
+    @Override
+    public List<User> searchStudents(UserStatus userStatus, String search, int page) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        int startElementNumber = page * 15 - 15;
+        List<User> students;
+        try {
+            if (userStatus == null && search.trim().isEmpty())
+                students = userDao.getUsersByRole(UserRole.STUDENT, startElementNumber);
+            else if (search.trim().isEmpty()) {
+                students = userDao.searchUsersByRoleAndStatus(UserRole.STUDENT, userStatus, startElementNumber);
+            } else if (userStatus == null) {
+                students = userDao.searchUsersByRoleAndQuery(UserRole.STUDENT, search, startElementNumber);
+            } else {
+                students = userDao.searchUsersByRoleAndStatusAndQuery(UserRole.STUDENT, userStatus, search, startElementNumber);
+            }
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding all students: " + exception);
+            throw new ServiceException("Error has occurred while finding all students: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+        return students;
+    }
+
+    @Override
+    public boolean changeUserStatus(int id, UserStatus userStatus) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            return userDao.changeUserStatus(id, userStatus);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while updating user status: " + exception);
+            throw new ServiceException("Error has occurred while updating user status: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
     }
 }

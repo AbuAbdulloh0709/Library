@@ -12,6 +12,7 @@ public class PagePath {
     public static final String LIBRARIANS = "/pages/admin/librarians.jsp";
     public static final String ALL_WAITING_STUDENTS = "/pages/admin/all_waiting_students.jsp";
     public static final String ALL_APPROVED_STUDENTS = "/pages/admin/all_approved_students.jsp";
+    public static final String ALL_STUDENTS = "/pages/admin/all_students.jsp";
     public static final String ALL_BOOKS = "/pages/admin/all_books_in_library.jsp";
     public static final String ADD_BOOK_GENRE = "/pages/admin/add_book_genre.jsp";
     public static final String ADD_BOOKS = "/pages/admin/add_books.jsp";

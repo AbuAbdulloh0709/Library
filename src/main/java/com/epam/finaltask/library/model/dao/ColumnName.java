@@ -31,5 +31,11 @@ public final class ColumnName {
     public static final String BOOK_DESCRIPTION = "description";
     public static final String BOOK_COPIES = "book_copies";
 
+    /**
+     * the constants for the genre table
+     **/
+
+    public static final String GENRE_NAME = "name";
+
 
 }

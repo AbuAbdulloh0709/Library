@@ -35,6 +35,7 @@ body, h1, p, input, button {
 .form-group {
     margin-bottom: 20px;
 }
+
 #reg {
     transition: 0.5s;
     transform-style: preserve-3d;

@@ -7,13 +7,6 @@
 <head>
     <link rel="stylesheet" href="css/sign_up.css" type="text/css">
 </head>
-<%
-    String role = (String) request.getSession().getAttribute("role");
-    String message = (String) request.getSession().getAttribute("message");
-    HashMap<String, String> userData = (HashMap<String, String>) request.getSession().getAttribute("user");
-    out.println(message);
-    out.println(role);
-%>
 <body>
 <div class="container">
     <div class="header">

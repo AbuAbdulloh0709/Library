@@ -33,8 +33,37 @@ public class UserDaoImpl extends UserDao {
             "SELECT * from users WHERE role = ?";
 
     private static final String SQL_SELECT_USERS_BY_ROLE_AND_STATUS =
-            "SELECT * from users WHERE role = ? and status = ? LIMIT 15 OFFSET ?";
+            "SELECT * from ( select * from users order by id) as u WHERE role = ? and status = ? LIMIT 15 OFFSET ?";
 
+
+    private static final String SQL_SELECT_ALL_USERS_BY_ROLE_WITH_PAGING =
+            "SELECT * from ( select * from users order by id) as u WHERE role = ? LIMIT 15 OFFSET ?";
+
+    private static final String SQL_SEARCH_USERS_BY_ROLE_AND_STATUS_AND_SEARCH_QUERY =
+            "SELECT *\n" +
+                    "from ( select * from users ordreturn Optional.empty();er by id) as u \n" +
+                    "WHERE role = ?\n" +
+                    "  and status = ?\n" +
+                    "  and (u.first_name like '%' || ? || '%' or u.last_name like '%' || ? || '%' or u.phone_number like '%' || ? || '%' or\n" +
+                    "       u.passport_number like '%' || ? || '%')\n" +
+                    "LIMIT 15 OFFSET ?";
+
+    private static final String SQL_SEARCH_USERS_BY_ROLE_AND_SEARCH_QUERY =
+            "SELECT *\n" +
+                    "from ( select * from users order by id) as u \n" +
+                    "WHERE role = ?\n" +
+                    "  and (u.first_name like '%' || ? || '%' or u.last_name like '%' || ? || '%' or u.phone_number like '%' || ? || '%' or\n" +
+                    "       u.passport_number like '%' || ? || '%')\n" +
+                    "LIMIT 15 OFFSET ?";
+
+    private static final String SQL_SEARCH_USERS_BY_ROLE_AND_STATUS =
+            "SELECT *\n" +
+                    "from ( select * from users order by id) as u\n" +
+                    "WHERE role = ?\n" +
+                    "  and status = ?\n" +
+                    "LIMIT 15 OFFSET ?";
+
+    private static final String SQL_CHANGE_USER_STATUS = "UPDATE users SET status = ? WHERE id = ?";
 
     public UserDaoImpl() {
     }
@@ -193,6 +222,91 @@ public class UserDaoImpl extends UserDao {
             throw new DaoException("Error has occurred while finding users by role and status: ", sqlException);
         }
         return users;
+    }
+
+
+    @Override
+    public List<User> getUsersByRole(UserRole role, int startElementNumber) throws DaoException {
+        List<User> users;
+//        ConnectionPool connectionPool = ConnectionPool.getInstance();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL_USERS_BY_ROLE_WITH_PAGING)) {
+            preparedStatement.setString(1, role.getRole());
+            preparedStatement.setInt(2, startElementNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            users = UserMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding users by role: " + sqlException);
+            throw new DaoException("Error has occurred while finding users by role: ", sqlException);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> searchUsersByRoleAndStatusAndQuery(UserRole role, UserStatus userStatus, String search, int startElementNumber) throws DaoException {
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SEARCH_USERS_BY_ROLE_AND_STATUS_AND_SEARCH_QUERY)) {
+            preparedStatement.setString(1, role.getRole());
+            preparedStatement.setString(2, userStatus.getStatus());
+            preparedStatement.setString(3, search);
+            preparedStatement.setString(4, search);
+            preparedStatement.setString(5, search);
+            preparedStatement.setString(6, search);
+            preparedStatement.setInt(7, startElementNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            users = UserMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding users by role, status and search query: " + sqlException);
+            throw new DaoException("Error has occurred while finding users by role, status and search query: ", sqlException);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> searchUsersByRoleAndQuery(UserRole role, String search, int startElementNumber) throws DaoException {
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SEARCH_USERS_BY_ROLE_AND_SEARCH_QUERY)) {
+            preparedStatement.setString(1, role.getRole());
+            preparedStatement.setString(2, search);
+            preparedStatement.setString(3, search);
+            preparedStatement.setString(4, search);
+            preparedStatement.setString(5, search);
+            preparedStatement.setInt(6, startElementNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            users = UserMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding users by role and search query: " + sqlException);
+            throw new DaoException("Error has occurred while finding users by role and search query: ", sqlException);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> searchUsersByRoleAndStatus(UserRole role, UserStatus userStatus,int startElementNumber) throws DaoException {
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_ROLE_AND_STATUS)) {
+            preparedStatement.setString(1, role.getRole());
+            preparedStatement.setString(2, userStatus.getStatus());
+            preparedStatement.setInt(3, startElementNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            users = UserMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding users by role and status: " + sqlException);
+            throw new DaoException("Error has occurred while finding users by role and status: ", sqlException);
+        }
+        return users;
+    }
+
+    @Override
+    public boolean changeUserStatus(int id, UserStatus status) throws DaoException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_CHANGE_USER_STATUS)) {
+            preparedStatement.setString(1, status.getStatus());
+            preparedStatement.setInt(2, id);
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while updating user status: " + exception);
+            throw new DaoException("Error has occurred while updating user status: ", exception);
+        }
     }
 
 

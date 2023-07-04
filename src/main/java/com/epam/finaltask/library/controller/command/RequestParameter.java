@@ -30,4 +30,17 @@ public final class RequestParameter {
 
 
     public static final String PAGE = "page";
+
+    public static final String SEARCH_TEXT = "search_text";
+
+    public static final String ID = "id";
+    public static final String NEW_STATUS = "new_status";
+
+    public static final String GENRE_NAME = "name";
+
+    public static final String BOOK_TITLE = "title";
+    public static final String BOOK_AUTHOR = "author";
+    public static final String BOOK_GENRE_ID = "genre_id";
+    public static final String BOOK_DESCRIPTION = "description";
+    public static final String BOOK_COPIES = "book_copies";
 }

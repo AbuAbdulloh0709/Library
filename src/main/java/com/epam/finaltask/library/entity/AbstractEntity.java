@@ -10,6 +10,10 @@ public abstract class AbstractEntity {
 
     }
 
+    public AbstractEntity(int id) {
+        this.id = id;
+    }
+
     protected AbstractEntity(int id, Timestamp createdAt) {
         this.id = id;
         this.createdAt = createdAt;

@@ -61,14 +61,13 @@
                         </c:forEach>
                         </tbody>
                     </table>
+                    <ctg:pages page="${page}" last="${last}" command="go_to_all_waiting_students"/>
                 </div>
             </div>
         </section>
 
-        <ctg:pages page="${page}" last="${last}" command="go_to_all_waiting_students"/>
 
-
-        </div>
+    </div>
     </div>
 </div>
 <jsp:include page="/pages/admin/modal/add_user.jsp"/>

@@ -1,4 +1,4 @@
-package com.epam.finaltask.library.controller.command.impl.administrator;
+package com.epam.finaltask.library.controller.command.impl.user;
 
 import com.epam.finaltask.library.controller.command.Command;
 import com.epam.finaltask.library.controller.command.PagePath;
@@ -19,9 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 import static com.epam.finaltask.library.controller.command.RequestParameter.*;
+import static com.epam.finaltask.library.controller.command.RequestParameter.LOGIN;
 import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.*;
 
-public class AddNewLibrarianCommand implements Command {
+public class AddNewAdministratorCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SIGN_UP_CONFIRM_MESSAGE_KEY = "confirm.sign_up";
     private static final String SIGN_UP_ERROR_MESSAGE_KEY = "error.sign_up";
@@ -44,32 +45,32 @@ public class AddNewLibrarianCommand implements Command {
         userData.put(PASSPORT_NUMBER, request.getParameter(PASSPORT_NUMBER));
         userData.put(ADDRESS, request.getParameter(ADDRESS));
 
-        List<User> librarians = null;
+        List<User> administrators = null;
 
         try {
             if (userService.isEmailOccupied(userData.get(EMAIL))) {
-                librarians = userService.findUsers(UserRole.ADMIN);
-                request.setAttribute(PagePath.LIBRARIANS, librarians);
+                administrators = userService.findUsers(UserRole.ADMIN);
+                request.setAttribute(ADMINISTRATORS, administrators);
                 request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
-                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
+                return new Router(PagePath.ADMINISTRATORS, Router.RouterType.FORWARD);
             }
             if (userService.isLoginOccupied(userData.get(LOGIN))) {
-                librarians = userService.findUsers(UserRole.ADMIN);
-                request.setAttribute(PagePath.LIBRARIANS, librarians);
+                administrators = userService.findUsers(UserRole.ADMIN);
+                request.setAttribute(ADMINISTRATORS, administrators);
                 request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
-                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
+                return new Router(PagePath.ADMINISTRATORS, Router.RouterType.FORWARD);
             }
-            if (userService.registerUser(userData, UserRole.LIBRARIAN, UserStatus.ACTIVE)) {
+            if (userService.registerUser(userData, UserRole.ADMIN, UserStatus.ACTIVE)) {
 //                request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
-                librarians = userService.findUsers(UserRole.LIBRARIAN);
-                request.setAttribute(PagePath.LIBRARIANS, librarians);
-                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
+                administrators = userService.findUsers(UserRole.ADMIN);
+                request.setAttribute(ADMINISTRATORS, administrators);
+                return new Router(PagePath.ADMINISTRATORS, Router.RouterType.FORWARD);
             } else {
                 request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);
-                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
+                return new Router(PagePath.ADMINISTRATORS, Router.RouterType.FORWARD);
             }
         } catch (ServiceException e) {
             LOGGER.error("Error has occurred while signing in: " + e);

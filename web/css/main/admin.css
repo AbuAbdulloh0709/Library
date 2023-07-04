@@ -65,8 +65,8 @@ nav li a:hover {
 }
 
 .main {
-    margin-left: 220px;
-    padding: 20px;
+    margin-left: 240px;
+    padding: 10px;
 }
 
 section {
@@ -107,10 +107,10 @@ th {
     background-color: #f8f8f8;
     font-weight: bold;
 }
-
-tr:nth-child(even) {
-    background-color: #fafafa;
-}
+/*ee8989*/
+/*tr {*/
+/*    background-color: #fafafa;*/
+/*}*/
 
 .actions-cell {
     display: flex;

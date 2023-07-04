@@ -1,11 +1,16 @@
 package com.epam.finaltask.library.controller.command.impl;
 
 import com.epam.finaltask.library.controller.command.Command;
-import com.epam.finaltask.library.controller.command.impl.administrator.AddNewAdministratorCommand;
-import com.epam.finaltask.library.controller.command.impl.administrator.AddNewLibrarianCommand;
+import com.epam.finaltask.library.controller.command.impl.book.AddBookCommand;
+import com.epam.finaltask.library.controller.command.impl.genre.AddBookGenreCommand;
+import com.epam.finaltask.library.controller.command.impl.genre.EditBookGenreCommand;
+import com.epam.finaltask.library.controller.command.impl.user.AddNewAdministratorCommand;
+import com.epam.finaltask.library.controller.command.impl.user.AddNewLibrarianCommand;
 import com.epam.finaltask.library.controller.command.impl.go_to.*;
 import com.epam.finaltask.library.controller.command.impl.signing.SignInCommand;
 import com.epam.finaltask.library.controller.command.impl.signing.SignUpCommand;
+import com.epam.finaltask.library.controller.command.impl.user.ChangeUserStatusCommand;
+import com.epam.finaltask.library.controller.command.impl.user.SearchUsersCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,6 +24,7 @@ public enum CommandType {
     GO_TO_LIBRARIANS(new GoToLibrariansCommand()),
     GO_TO_ALL_WAITING_STUDENTS(new GoToAllWaitingStudentsCommand()),
     GO_TO_ALL_APPROVED_STUDENTS(new GoToApprovedStudentsCommand()),
+    GO_TO_ALL_STUDENTS(new GoToAllStudentsCommand()),
     GO_TO_ALL_BOOKS(new GoToAllBooksCommand()),
     GO_TO_ADD_BOOK_GENRE(new GoToAddBookGenreCommand()),
     GO_TO_ADD_BOOKS(new GoToAddBookCommand()),
@@ -31,6 +37,11 @@ public enum CommandType {
     SIGN_IN(new SignInCommand()),
     ADD_ADMINISTRATOR(new AddNewAdministratorCommand()),
     ADD_LIBRARIAN(new AddNewLibrarianCommand()),
+    SEARCH_STUDENTS(new SearchUsersCommand()),
+    CHANGE_USER_STATUS(new ChangeUserStatusCommand()),
+    ADD_BOOK_GENRE(new AddBookGenreCommand()),
+    EDIT_BOOK_GENRE(new EditBookGenreCommand()),
+    ADD_BOOK(new AddBookCommand()),
     DEFAULT(new DefaultCommand());
 
 

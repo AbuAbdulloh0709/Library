@@ -6,7 +6,7 @@
 <fmt:setBundle basename="pagecontent"/>
 <html>
 <head>
-    <link rel="stylesheet" href="css/sign_up.css" type="text/css">
+    <link rel="stylesheet" href="/css/sign_up.css" type="text/css">
 </head>
 <c:set var="currentPath" value="${pageContext.request.requestURI}" />
 <body>
