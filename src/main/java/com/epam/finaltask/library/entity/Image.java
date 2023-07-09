@@ -1,12 +1,16 @@
 package com.epam.finaltask.library.entity;
 
-public class Image{
+public class Image extends AbstractEntity {
     private int id;
     private int bookId;
     private String url;
 
-    private Image(){
+    public Image() {
+    }
 
+    public Image(int bookId, String url) {
+        this.bookId = bookId;
+        this.url = url;
     }
 
     public Image(int id, int bookId, String url) {

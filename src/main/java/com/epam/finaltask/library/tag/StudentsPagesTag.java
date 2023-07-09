@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class PagesTag  extends TagSupport {
+public class StudentsPagesTag extends TagSupport {
     private static final Logger LOGGER = LogManager.getLogger();
     private int page;
     private String command;

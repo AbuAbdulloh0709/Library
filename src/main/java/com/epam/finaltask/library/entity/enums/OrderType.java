@@ -8,5 +8,8 @@ public enum OrderType {
     /**
      * If a book is given to borrow.
      */
-    BORROW,
+    BORROW;
+    public String getType(){
+        return this.toString().toLowerCase();
+    }
 }

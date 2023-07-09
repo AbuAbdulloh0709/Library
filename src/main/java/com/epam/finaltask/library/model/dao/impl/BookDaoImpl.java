@@ -19,7 +19,16 @@ public class BookDaoImpl extends BookDao {
             "values (?,?,?,?,?)";
 
     private static final String SQL_SELECT_BOOKS_BY_TITLE =
-            "SELECT * FROM books WHERE title = ?";
+            "SELECT books.*,genres.id as genre_id, genres.name as name FROM books left join genres on books.genre_id = genres.id WHERE title = ?";
+
+    private static final String SQL_SELECT_BOOK_BY_ID =
+            "SELECT books.*,genres.id as genre_id, genres.name as name FROM books left join genres on books.genre_id = genres.id WHERE books.id = ? LIMIT 1";
+
+    private static final String SQL_SELECT_BOOKS =
+            "SELECT books.*,genres.id as genre_id, genres.name as name FROM books left join genres on books.genre_id = genres.id LIMIT 12 OFFSET ?";
+
+    private static final String SQL_SELECT_BOOKS_BY_GENRE =
+            "SELECT books.*,genres.id as genre_id, genres.name as name FROM books left join genres on books.genre_id = genres.id WHERE genres.id = ? LIMIT 12 OFFSET ?";
 
     public BookDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
@@ -31,7 +40,7 @@ public class BookDaoImpl extends BookDao {
     public int add(Book book) throws DaoException {
         try (PreparedStatement prepareStatement = connection.prepareStatement(SQL_INSERT_BOOK, Statement.RETURN_GENERATED_KEYS)) {
             prepareStatement.setString(1, book.getTitle());
-            prepareStatement.setInt(2, book.getGenreId());
+            prepareStatement.setInt(2, book.getGenre().getId());
             prepareStatement.setString(3, book.getAuthor());
             prepareStatement.setString(4, book.getDescription());
             prepareStatement.setInt(5, book.getBookCopies());
@@ -61,8 +70,18 @@ public class BookDaoImpl extends BookDao {
     }
 
     @Override
-    public Optional<Book> findById(Integer integer) throws DaoException {
-        return Optional.empty();
+    public Optional<Book> findById(Integer id) throws DaoException {
+        List<Book> books;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BOOK_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            BookMapper bookMapper = BookMapper.getInstance();
+            books = bookMapper.retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding user by id: " + sqlException);
+            throw new DaoException("Error has occurred while finding user by id: ", sqlException);
+        }
+        return books.isEmpty() ? Optional.empty() : Optional.of(books.get(0));
     }
 
     @Override
@@ -78,5 +97,34 @@ public class BookDaoImpl extends BookDao {
             throw new DaoException("Error has occurred while finding books by title: ", sqlException);
         }
         return books.isEmpty() ? Optional.empty() : Optional.of(books.get(0));
+    }
+
+    @Override
+    public List<Book> getBooksByGenre(int genre_id, int startElementNumber) throws DaoException {
+        List<Book> books;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BOOKS_BY_GENRE)) {
+            preparedStatement.setInt(1, genre_id);
+            preparedStatement.setInt(2, startElementNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            books = BookMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding books by genre: " + sqlException);
+            throw new DaoException("Error has occurred while finding books by genre: ", sqlException);
+        }
+        return books;
+    }
+
+    @Override
+    public List<Book> getBooks(int startElementNumber) throws DaoException {
+        List<Book> books;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_BOOKS)) {
+            preparedStatement.setInt(1, startElementNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            books = BookMapper.getInstance().retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding books: " + sqlException);
+            throw new DaoException("Error has occurred while finding books: ", sqlException);
+        }
+        return books;
     }
 }

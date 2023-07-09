@@ -18,4 +18,8 @@ public class PagePath {
     public static final String ADD_BOOKS = "/pages/admin/add_books.jsp";
     public static final String ISSUE_RETURN_BOOKS = "/pages/admin/issue_return_books.jsp";
     public static final String VIEW_ALL_ISSUED_BOOKS = "/pages/admin/all_issued_books.jsp";
+    public static final String SHOW_BOOKS_FOR_GUEST = "/pages/admin/book/show_for_guest.jsp";
+    public static final String BOOKS_TO_ISSUE = "/pages/admin/book/books_to_issue.jsp";
+    public static final String ISSUE_BOOK_BY_STUDENT = "/pages/admin/book/issue_book_by_student.jsp";
+    public static final String ISSUE_BOOK = "/pages/admin/book/issue_book.jsp";
 }

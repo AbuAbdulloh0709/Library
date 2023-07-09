@@ -13,19 +13,15 @@ public interface UserService {
 
     Optional<User> findUser(String login, String password) throws ServiceException;
 
-    Optional<User> findUser(String firstName, String lastName, UserRole userRole) throws ServiceException;
+    Optional<User> findUserByEmail(String email) throws ServiceException;
 
-    Optional<User> findUser(String login) throws ServiceException;
+    Optional<User> findUserByPassport(String passport) throws ServiceException;
+
+    Optional<User> findUserByPassportOrEmail(String search_text) throws ServiceException;
 
     List<User> findUsers(UserRole userRole) throws ServiceException;
 
-    Map<User, String> findUsers(UserRole userRole, int page) throws ServiceException;
-
-    Map<User, String> findUsers(Map<String, String> userData, int page) throws ServiceException;
-
     boolean registerUser(Map<String, String> userData, UserRole userRole, UserStatus userStatus) throws ServiceException;
-
-    boolean checkRoles(Map<String, String> userRoles) throws ServiceException;
 
     boolean isLoginOccupied(String login) throws ServiceException;
 

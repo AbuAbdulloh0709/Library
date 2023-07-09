@@ -14,12 +14,12 @@ import java.util.Optional;
 
 public class GenreServiceImpl implements GenreService {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final GenreServiceImpl instance = new GenreServiceImpl();
+    private static final GenreService instance = new GenreServiceImpl();
 
     public GenreServiceImpl() {
     }
 
-    public static GenreServiceImpl getInstance() {
+    public static GenreService getInstance() {
         return instance;
     }
 

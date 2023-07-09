@@ -4,8 +4,10 @@ import com.epam.finaltask.library.controller.command.Command;
 import com.epam.finaltask.library.controller.command.PagePath;
 import com.epam.finaltask.library.controller.command.Router;
 import com.epam.finaltask.library.controller.command.SessionAttribute;
+import com.epam.finaltask.library.controller.command.impl.RequestAttribute;
 import com.epam.finaltask.library.entity.User;
 import com.epam.finaltask.library.entity.enums.UserRole;
+import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.exception.ServiceException;
 import com.epam.finaltask.library.model.service.UserService;
 import com.epam.finaltask.library.model.service.impl.UserServiceImpl;
@@ -24,7 +26,9 @@ import static com.epam.finaltask.library.controller.command.impl.RequestAttribut
 public class SignInCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String SIGN_IN_ERROR_MESSAGE_KEY = "error.sign_in";
-    private static final UserService userService = UserServiceImpl.getInstance();
+    private static final String USER_BLOCKED_MESSAGE = "error.blocked";
+    private static final String USER_INACTIVE_MESSAGE = "error.inactive";
+    private final UserService userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -40,11 +44,18 @@ public class SignInCommand implements Command {
                 String number = PhoneNumberFormatter.format(user.get().getPhoneNumber());
                 session.setAttribute(SessionAttribute.NUMBER, number);
                 session.setAttribute(SessionAttribute.USER, user.get());
+                session.setAttribute(SessionAttribute.USER_ID, user.get().getId());
                 session.setAttribute(SessionAttribute.ROLE, user.get().getRole().getRole());
-                if (user.get().getRole().equals(UserRole.ADMIN))
-                    return new Router(PagePath.DASHBOARD, Router.RouterType.REDIRECT);
-                else
-                    return new Router(PagePath.HOME, Router.RouterType.REDIRECT);
+
+                if (user.get().getStatus().equals(UserStatus.BLOCKED)) {
+                    request.setAttribute(MESSAGE, USER_BLOCKED_MESSAGE);
+                    return new Router(PagePath.SIGN_IN, Router.RouterType.FORWARD);
+                }
+                if (user.get().getStatus().equals(UserStatus.INACTIVE)) {
+                    request.setAttribute(MESSAGE, USER_INACTIVE_MESSAGE);
+                    return new Router(PagePath.SIGN_IN, Router.RouterType.FORWARD);
+                }
+                return new Router(PagePath.DASHBOARD, Router.RouterType.REDIRECT);
             } else {
                 request.setAttribute(USER_LOGIN, login);
                 request.setAttribute(USER_PASSWORD, password);

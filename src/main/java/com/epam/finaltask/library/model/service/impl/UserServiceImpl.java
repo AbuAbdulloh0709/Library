@@ -25,7 +25,7 @@ import static com.epam.finaltask.library.controller.command.RequestParameter.*;
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final UserServiceImpl instance = new UserServiceImpl();
+    private static final UserService instance = new UserServiceImpl();
     private static final String INCORRECT_VALUE_PARAMETER = "incorrect";
     private static final String NUMBER_REMOVING_SYMBOLS_REGEX = "[+()-]";
     private static final String NUMBER_REPLACEMENT_REGEX = "";
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     private UserServiceImpl() {
     }
 
-    public static UserServiceImpl getInstance() {
+    public static UserService getInstance() {
         return instance;
     }
 
@@ -64,13 +64,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUser(String firstName, String lastName, UserRole userRole) throws ServiceException {
-        return Optional.empty();
+    public Optional<User> findUserByEmail(String email) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            return userDao.findUserByEmail(email);
+        } catch (DaoException e) {
+            LOGGER.error("Error has occurred while searching for user with email \"{}\": {}", email, e);
+            throw new ServiceException("Error has occurred while searching for user with email \"" + email + "\": ", e);
+        } finally {
+            userDao.closeConnection();
+        }
     }
 
     @Override
-    public Optional<User> findUser(String login) throws ServiceException {
-        return Optional.empty();
+    public Optional<User> findUserByPassport(String passport) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            return userDao.findUserByPassport(passport);
+        } catch (DaoException e) {
+            LOGGER.error("Error has occurred while searching for user with passport \"{}\": {}", passport, e);
+            throw new ServiceException("Error has occurred while searching for user with passport \"" + passport + "\": ", e);
+        } finally {
+            userDao.closeConnection();
+        }
+    }
+
+    @Override
+    public Optional<User> findUserByPassportOrEmail(String search_text) throws ServiceException {
+        Optional<User> studentByPassport = findUserByPassport(search_text);
+        if (studentByPassport.isPresent()) return studentByPassport;
+        else return findUserByEmail(search_text);
     }
 
     @Override
@@ -85,16 +110,6 @@ public class UserServiceImpl implements UserService {
         } finally {
             userDao.closeConnection();
         }
-    }
-
-    @Override
-    public Map<User, String> findUsers(UserRole userRole, int page) throws ServiceException {
-        return null;
-    }
-
-    @Override
-    public Map<User, String> findUsers(Map<String, String> userData, int page) throws ServiceException {
-        return null;
     }
 
     @Override
@@ -149,11 +164,6 @@ public class UserServiceImpl implements UserService {
                 LOGGER.error("Error has occurred while ending transaction for registering user: " + exception);
             }
         }
-    }
-
-    @Override
-    public boolean checkRoles(Map<String, String> userRoles) throws ServiceException {
-        return false;
     }
 
     @Override

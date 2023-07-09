@@ -43,4 +43,20 @@ public final class RequestParameter {
     public static final String BOOK_GENRE_ID = "genre_id";
     public static final String BOOK_DESCRIPTION = "description";
     public static final String BOOK_COPIES = "book_copies";
+    public static final String BOOK_IMAGE_UPLOAD = "book_image";
+    public static final String BOOK_ID = "book_id";
+    public static final String BOOK = "book";
+
+    public static final String ORDER_USER_ID = "order_user_id";
+    public static final String ORDER_TYPE = "order_type";
+    public static final String ISSUE_DATE = "issue_date";
+    public static final String RETURN_DATE = "return_date";
+    public static final String USAGE_OF_DAYS = "usage_of_days";
+
+    public static final String ORDER_DETAIL_USER_ID = "order_detail_user_id";
+    public static final String ORDER_DETAIL_STATUS = "order_detail_status";
+    public static final String ORDER_DETAIL_COMMENT = "order_detail_comment";
+
+    public static final String STUDENT = "student";
+    public static final String STUDENT_ID = "student_id";
 }

@@ -1,46 +1,45 @@
 package com.epam.finaltask.library.entity;
 
-import java.sql.Timestamp;
+import com.epam.finaltask.library.entity.enums.OrderDetailStatus;
 
 public class OrderDetail extends AbstractEntity{
-    private int orderId;
-    private int userId;
-    private String status;
+    private Order order;
+    private User user;
+    private OrderDetailStatus orderDetailStatus;
     private String comment;
 
     public OrderDetail() {
     }
 
-    public OrderDetail(int id, Timestamp createdAt, int orderId, int userId, String status, String comment) {
-        super(id, createdAt);
-        this.orderId = orderId;
-        this.userId = userId;
-        this.status = status;
+    public OrderDetail(int id, Order order, User user, OrderDetailStatus status, String comment) {
+        super(id);
+        this.order = order;
+        this.user = user;
+        this.orderDetailStatus = status;
         this.comment = comment;
     }
 
-    public int getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getStatus() {
-        return status;
+    public OrderDetailStatus getOrderDetailStatus() {
+        return orderDetailStatus;
     }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setOrderDetailStatus(OrderDetailStatus orderDetailStatus) {
+        this.orderDetailStatus = orderDetailStatus;
     }
 
     public String getComment() {

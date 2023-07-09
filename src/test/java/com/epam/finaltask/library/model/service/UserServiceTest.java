@@ -51,7 +51,7 @@ public class UserServiceTest {
     private UserValidatorImpl validator;
 
     @InjectMocks
-    private UserServiceImpl userService = UserServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
 
     @BeforeClass
     public void init() {

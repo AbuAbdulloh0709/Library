@@ -1,57 +1,59 @@
 package com.epam.finaltask.library.entity;
 
+import com.epam.finaltask.library.entity.enums.OrderType;
+
 import java.sql.Timestamp;
 
 public class Order extends AbstractEntity {
-    private int userId;
-    private int bookId;
-    private Timestamp issueDate;
-    private Timestamp returnDate;
+    private User user;
+    private Book book;
+    private String issueDate;
+    private String returnDate;
     private int usageDays;
-    private String orderType;
+    private OrderType orderType;
 
     public Order() {
     }
 
-    public Order(int id, Timestamp createdAt, int userId, int bookId, Timestamp issueDate, Timestamp returnDate, int usageDays, String orderType) {
+    public Order(int id, Timestamp createdAt, User user, Book book, String issueDate, String returnDate, int usageDays, OrderType orderType) {
         super(id, createdAt);
-        this.userId = userId;
-        this.bookId = bookId;
+        this.user = user;
+        this.book = book;
         this.issueDate = issueDate;
         this.returnDate = returnDate;
         this.usageDays = usageDays;
         this.orderType = orderType;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
-    public Timestamp getIssueDate() {
+    public String getIssueDate() {
         return issueDate;
     }
 
-    public void setIssueDate(Timestamp issueDate) {
+    public void setIssueDate(String issueDate) {
         this.issueDate = issueDate;
     }
 
-    public Timestamp getReturnDate() {
+    public String getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Timestamp returnDate) {
+    public void setReturnDate(String returnDate) {
         this.returnDate = returnDate;
     }
 
@@ -63,11 +65,11 @@ public class Order extends AbstractEntity {
         this.usageDays = usageDays;
     }
 
-    public String getOrderType() {
+    public OrderType getOrderType() {
         return orderType;
     }
 
-    public void setOrderType(String orderType) {
+    public void setOrderType(OrderType orderType) {
         this.orderType = orderType;
     }
 }

@@ -4,5 +4,9 @@ public enum OrderDetailStatus {
     CREATED,
     CANCELED,
     ACCEPTED,
-    RETURNED
+    RETURNED;
+
+    public String getStatus(){
+       return this.toString().toLowerCase();
+    }
 }

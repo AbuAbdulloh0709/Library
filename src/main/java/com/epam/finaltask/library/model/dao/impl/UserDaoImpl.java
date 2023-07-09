@@ -22,8 +22,14 @@ public class UserDaoImpl extends UserDao {
     private static final String SQL_SELECT_USERS_BY_LOGIN =
             "SELECT * FROM users WHERE login = ?";
 
+    private static final String SQL_SELECT_USERS_BY_ID =
+            "SELECT * FROM users WHERE id = ?";
+
     private static final String SQL_SELECT_USERS_BY_EMAIL =
             "SELECT * FROM users WHERE email = ?";
+
+    private static final String SQL_SELECT_USERS_BY_PASSPORT =
+            "SELECT * FROM users WHERE passport_number = ?";
 
     private static final String SQL_SELECT_USER_PASSWORD = "SELECT password FROM users WHERE login = ?";
 
@@ -113,8 +119,19 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
-    public Optional<User> findById(Integer integer) throws DaoException {
-        return Optional.empty();
+    public Optional<User> findById(Integer id) throws DaoException {
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding user by id: " + exception);
+            throw new DaoException("Error has occurred while finding user by id: ", exception);
+        }
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
     @Override
@@ -134,11 +151,6 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
-    public Optional<User> findUserByPassword(String password) throws DaoException {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<User> findUserByEmail(String email) throws DaoException {
         List<User> users;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_EMAIL)) {
@@ -155,8 +167,19 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
-    public List<User> findUsersByStatus(User user, int startElementNumber) throws DaoException {
-        return null;
+    public Optional<User> findUserByPassport(String passport) throws DaoException {
+        List<User> users;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_PASSPORT)) {
+            preparedStatement.setString(1, passport);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                UserMapper userMapper = UserMapper.getInstance();
+                users = userMapper.retrieve(resultSet);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while finding user by passport: " + exception);
+            throw new DaoException("Error has occurred while finding user by passport: ", exception);
+        }
+        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
     @Override
@@ -172,11 +195,6 @@ public class UserDaoImpl extends UserDao {
             throw new DaoException("Error has occurred while finding users by role: ", sqlException);
         }
         return users;
-    }
-
-    @Override
-    public List<User> findUsersByRole(UserRole userRole, int startElementNumber) throws DaoException {
-        return null;
     }
 
     @Override

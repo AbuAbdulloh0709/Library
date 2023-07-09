@@ -2,6 +2,8 @@ package com.epam.finaltask.library.controller.command.impl;
 
 import com.epam.finaltask.library.controller.command.Command;
 import com.epam.finaltask.library.controller.command.impl.book.AddBookCommand;
+import com.epam.finaltask.library.controller.command.impl.book.IssueBookByStudentCommand;
+import com.epam.finaltask.library.controller.command.impl.book.IssueBookCommand;
 import com.epam.finaltask.library.controller.command.impl.genre.AddBookGenreCommand;
 import com.epam.finaltask.library.controller.command.impl.genre.EditBookGenreCommand;
 import com.epam.finaltask.library.controller.command.impl.user.AddNewAdministratorCommand;
@@ -30,6 +32,10 @@ public enum CommandType {
     GO_TO_ADD_BOOKS(new GoToAddBookCommand()),
     GO_TO_ISSUE_RETURN_BOOKS(new GoToIssueReturnBooksCommand()),
     GO_TO_ISSUED_BOOKS(new GoToIssuedBooksCommand()),
+    GO_TO_SHOW_BOOKS_FOR_GUEST(new GoToShowBooksForGuestCommand()),
+    GO_TO_BOOKS_TO_ISSUE(new GoToBooksToIssueCommand()),
+    GO_TO_ISSUE_BOOK_BY_STUDENT(new GoToIssueBookByStudentCommand()),
+    GO_TO_ISSUE_BOOK(new GoToIssueBookCommand()),
 
 
 
@@ -42,6 +48,8 @@ public enum CommandType {
     ADD_BOOK_GENRE(new AddBookGenreCommand()),
     EDIT_BOOK_GENRE(new EditBookGenreCommand()),
     ADD_BOOK(new AddBookCommand()),
+    ISSUE_BOOK_BY_STUDENT(new IssueBookByStudentCommand()),
+    ISSUE_BOOK(new IssueBookCommand()),
     DEFAULT(new DefaultCommand());
 
 

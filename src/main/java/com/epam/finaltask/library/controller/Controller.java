@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/controller")
-@MultipartConfig(maxRequestSize = 1024 * 1024 * 10)
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 16, maxFileSize = 1024 * 1024 * 16, maxRequestSize = 1024 * 1024 * 10 * 10)
 public class Controller extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,7 +31,6 @@ public class Controller extends HttpServlet {
         String commandType = request.getParameter(RequestParameter.COMMAND);
         Command command = CommandType.defineCommand(commandType);
         Router router = command.execute(request);
-        System.out.println(commandType);
         switch (router.getType()) {
             case FORWARD -> request.getRequestDispatcher(router.getPage()).forward(request, response);
             case REDIRECT -> response.sendRedirect(request.getContextPath() + router.getPage());
