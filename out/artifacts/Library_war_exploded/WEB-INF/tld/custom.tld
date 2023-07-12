@@ -38,6 +38,37 @@
         </attribute>
     </tag>
     <tag>
+        <name>issued_books</name>
+        <tag-class>com.epam.finaltask.library.tag.IssuedBooksPagesTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>page</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>int</type>
+        </attribute>
+        <attribute>
+            <name>last</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+            <attribute>
+            <name>search_text</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>issue_type</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>command</name>
+            <required>true</required>
+        </attribute>
+    </tag>
+    <tag>
         <name>book_pages</name>
         <tag-class>com.epam.finaltask.library.tag.BooksPagesTag</tag-class>
         <body-content>empty</body-content>

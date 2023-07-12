@@ -40,7 +40,8 @@ public final class ColumnName {
      * the constants for the genre table
      **/
 
-    public static final String GENRE_NAME = "name";
+    public static final String GENRE_NAME = "genre_name";
+    public static final String NAME = "name";
 
 
     /**
@@ -51,15 +52,26 @@ public final class ColumnName {
     public static final String IMAGE_BOOK_ID = "book_id";
 
     /**
-     * the constants for the orders table
+     * the constants for the orders and order details table
      **/
 
-    public static final String ORDER_USER_ID = "user_id";
+    public static final String ORDER_USER_ID = "order_user_id";
     public static final String ORDER_ID = "order_id";
     public static final String ORDER_BOOK_ID = "book_id";
     public static final String ORDER_ISSUE_DATE = "issue_date";
     public static final String ORDER_RETURN_DATE = "return_date";
     public static final String ORDER_USAGE_DAYS = "usage_days";
     public static final String ORDER_TYPE = "type";
+    public static final String ORDER_LAST_STATUS = "last_status";
+    public static final String BAC_ID = "bac_id";
+    public static final String BAC_AVAILABLE_COPIES = "available_copies";
+    public static String BAC_BOOK_ID = "book_id";
+    public static String AVAILABLE_COPIES = "available_copies";
+    public static String ORDER_DETAILS_USER_ID = "user_id";
+    public static String ORDER_DETAILS_ID = "order_details_id";
+    public static String ORDER_DETAILS_STATUS = "order_details_status";
+    public static String ORDER_DETAILS_CREATED_AT = "order_details_status";
+    public static String ORDER_DETAILS_USER_STATUS = "user_status";
+    public static String ORDER_DETAILS_COMMENT = "comment";
 
 }

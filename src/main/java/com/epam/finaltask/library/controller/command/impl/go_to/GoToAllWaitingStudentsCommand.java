@@ -10,7 +10,6 @@ import com.epam.finaltask.library.exception.ServiceException;
 import com.epam.finaltask.library.model.service.UserService;
 import com.epam.finaltask.library.model.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

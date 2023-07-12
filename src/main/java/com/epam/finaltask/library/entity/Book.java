@@ -9,6 +9,7 @@ public class Book extends AbstractEntity {
     private String author;
     private String description;
     private int bookCopies;
+    private BookAvailableCopies bookAvailableCopies;
     private List<Image> images;
 
     public Book() {
@@ -29,6 +30,14 @@ public class Book extends AbstractEntity {
         this.author = author;
         this.description = description;
         this.bookCopies = bookCopies;
+    }
+
+    public BookAvailableCopies getBookAvailableCopies() {
+        return bookAvailableCopies;
+    }
+
+    public void setBookAvailableCopies(BookAvailableCopies bookAvailableCopies) {
+        this.bookAvailableCopies = bookAvailableCopies;
     }
 
     public Genre getGenre() {

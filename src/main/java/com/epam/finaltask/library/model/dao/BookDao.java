@@ -1,10 +1,6 @@
 package com.epam.finaltask.library.model.dao;
 
 import com.epam.finaltask.library.entity.Book;
-import com.epam.finaltask.library.entity.Genre;
-import com.epam.finaltask.library.entity.User;
-import com.epam.finaltask.library.entity.enums.UserRole;
-import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.exception.DaoException;
 
 import java.util.List;

@@ -28,7 +28,7 @@ public class GenreMapper implements BaseMapper<Genre> {
         while (resultSet.next()){
             Genre genre = new Genre();
             genre.setId(resultSet.getInt(ID));
-            genre.setName(resultSet.getString(ColumnName.GENRE_NAME));
+            genre.setName(resultSet.getString(ColumnName.NAME));
             genres.add(genre);
         }
         return genres;

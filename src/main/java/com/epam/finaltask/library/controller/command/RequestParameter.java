@@ -59,4 +59,6 @@ public final class RequestParameter {
 
     public static final String STUDENT = "student";
     public static final String STUDENT_ID = "student_id";
+    public static final String ISSUE_TYPE = "issue_type";
+    public static final String ORDER_ID = "order_id";
 }

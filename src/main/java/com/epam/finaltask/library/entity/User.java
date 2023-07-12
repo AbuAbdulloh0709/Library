@@ -5,7 +5,6 @@ import com.epam.finaltask.library.entity.enums.UserStatus;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.Date;
 
 public class User extends AbstractEntity {
     private String firstName;

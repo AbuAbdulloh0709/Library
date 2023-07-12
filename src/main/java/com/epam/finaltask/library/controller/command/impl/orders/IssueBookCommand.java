@@ -1,4 +1,4 @@
-package com.epam.finaltask.library.controller.command.impl.book;
+package com.epam.finaltask.library.controller.command.impl.orders;
 
 import com.epam.finaltask.library.controller.command.*;
 import com.epam.finaltask.library.controller.command.impl.RequestAttribute;
@@ -21,13 +21,11 @@ import java.util.List;
 
 import static com.epam.finaltask.library.controller.command.RequestParameter.*;
 
-public class IssueBookByStudentCommand implements Command {
+public class IssueBookCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();
     private final OrderService orderService = OrderServiceImpl.getInstance();
     private final BookService bookService = BookServiceImpl.getInstance();
     private final GenreService genreService = GenreServiceImpl.getInstance();
-    private static final String ORDER_TYPE = "borrow";
-    private static final String COMMENT = "comment";
     private static final String ORDER_DETAIL_STATUS = "created";
 
     @Override
@@ -39,11 +37,10 @@ public class IssueBookByStudentCommand implements Command {
         String order_detail_user_id = String.valueOf(session.getAttribute(SessionAttribute.USER_ID));
         orderMap.put(ORDER_DETAIL_USER_ID, order_detail_user_id);
 
-        orderMap.put(ORDER_USER_ID, order_detail_user_id);
+        orderMap.put(ORDER_USER_ID, request.getParameter(STUDENT_ID));
         orderMap.put(BOOK_ID, request.getParameter(BOOK_ID));
-        orderMap.put(RequestParameter.ORDER_TYPE, ORDER_TYPE);
+        orderMap.put(RequestParameter.ORDER_TYPE, request.getParameter(RequestParameter.ORDER_TYPE));
         orderMap.put(RequestParameter.ORDER_DETAIL_STATUS, ORDER_DETAIL_STATUS);
-        orderMap.put(ORDER_DETAIL_COMMENT, COMMENT);
         orderMap.put(ISSUE_DATE, request.getParameter(ISSUE_DATE));
         orderMap.put(RETURN_DATE, request.getParameter(RETURN_DATE));
 

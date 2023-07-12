@@ -1,8 +1,8 @@
 package com.epam.finaltask.library.model.dao.mapper.impl;
 
 import com.epam.finaltask.library.entity.Book;
+import com.epam.finaltask.library.entity.BookAvailableCopies;
 import com.epam.finaltask.library.entity.Genre;
-import com.epam.finaltask.library.entity.Image;
 import com.epam.finaltask.library.model.dao.ColumnName;
 import com.epam.finaltask.library.model.dao.mapper.BaseMapper;
 
@@ -34,10 +34,16 @@ public class BookMapper implements BaseMapper<Book> {
             book.setAuthor(resultSet.getString(ColumnName.BOOK_AUTHOR));
             Genre genre = new Genre();
             genre.setId(resultSet.getInt(ColumnName.BOOK_GENRE_ID));
-            genre.setName(resultSet.getString(ColumnName.GENRE_NAME));
+            genre.setName(resultSet.getString(ColumnName.NAME));
             book.setGenre(genre);
             book.setDescription(resultSet.getString(ColumnName.BOOK_DESCRIPTION));
             book.setBookCopies(resultSet.getInt(ColumnName.BOOK_COPIES));
+
+            BookAvailableCopies bac = new BookAvailableCopies();
+            bac.setId(resultSet.getInt(ColumnName.BAC_ID));
+            bac.setBookId(resultSet.getInt(ID));
+            bac.setAvailableCopies(resultSet.getInt(ColumnName.BAC_AVAILABLE_COPIES));
+            book.setBookAvailableCopies(bac);
             books.add(book);
         }
         return books;

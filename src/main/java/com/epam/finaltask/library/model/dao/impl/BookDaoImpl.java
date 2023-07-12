@@ -19,16 +19,24 @@ public class BookDaoImpl extends BookDao {
             "values (?,?,?,?,?)";
 
     private static final String SQL_SELECT_BOOKS_BY_TITLE =
-            "SELECT books.*,genres.id as genre_id, genres.name as name FROM books left join genres on books.genre_id = genres.id WHERE title = ?";
+            "SELECT books.*,genres.id as genre_id, genres.name as name,bac.id as bac_id, bac.available_copies FROM books " +
+                    "join genres on books.genre_id = genres.id " +
+                    "join book_available_copies bac on books.id = bac.book_id WHERE title = ?";
 
     private static final String SQL_SELECT_BOOK_BY_ID =
-            "SELECT books.*,genres.id as genre_id, genres.name as name FROM books left join genres on books.genre_id = genres.id WHERE books.id = ? LIMIT 1";
+            "SELECT books.*,genres.id as genre_id, genres.name as name,bac.id as bac_id, bac.available_copies FROM books " +
+                    "join genres on books.genre_id = genres.id " +
+                    "join book_available_copies bac on books.id = bac.book_id WHERE books.id = ? LIMIT 1";
 
     private static final String SQL_SELECT_BOOKS =
-            "SELECT books.*,genres.id as genre_id, genres.name as name FROM books left join genres on books.genre_id = genres.id LIMIT 12 OFFSET ?";
+            "SELECT books.*,genres.id as genre_id, genres.name as name,bac.id as bac_id, bac.available_copies FROM books " +
+                    "join genres on books.genre_id = genres.id " +
+                    "join book_available_copies bac on books.id = bac.book_id LIMIT 15 OFFSET ?";
 
     private static final String SQL_SELECT_BOOKS_BY_GENRE =
-            "SELECT books.*,genres.id as genre_id, genres.name as name FROM books left join genres on books.genre_id = genres.id WHERE genres.id = ? LIMIT 12 OFFSET ?";
+            "SELECT books.*,genres.id as genre_id, genres.name as name,bac.id as bac_id, bac.available_copies FROM books " +
+                    "join genres on books.genre_id = genres.id " +
+                    "join book_available_copies bac on books.id = bac.book_id WHERE genres.id = ? LIMIT 15 OFFSET ?";
 
     public BookDaoImpl(boolean isTransaction) {
         if (!isTransaction) {

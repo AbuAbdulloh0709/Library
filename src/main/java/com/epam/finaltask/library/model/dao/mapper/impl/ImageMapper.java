@@ -1,6 +1,5 @@
 package com.epam.finaltask.library.model.dao.mapper.impl;
 
-import com.epam.finaltask.library.entity.Genre;
 import com.epam.finaltask.library.entity.Image;
 import com.epam.finaltask.library.model.dao.ColumnName;
 import com.epam.finaltask.library.model.dao.mapper.BaseMapper;

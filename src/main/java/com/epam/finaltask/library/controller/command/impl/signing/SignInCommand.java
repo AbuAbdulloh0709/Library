@@ -4,9 +4,7 @@ import com.epam.finaltask.library.controller.command.Command;
 import com.epam.finaltask.library.controller.command.PagePath;
 import com.epam.finaltask.library.controller.command.Router;
 import com.epam.finaltask.library.controller.command.SessionAttribute;
-import com.epam.finaltask.library.controller.command.impl.RequestAttribute;
 import com.epam.finaltask.library.entity.User;
-import com.epam.finaltask.library.entity.enums.UserRole;
 import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.exception.ServiceException;
 import com.epam.finaltask.library.model.service.UserService;
@@ -20,7 +18,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
-import static com.epam.finaltask.library.controller.command.RequestParameter.*;
+import static com.epam.finaltask.library.controller.command.RequestParameter.LOGIN;
+import static com.epam.finaltask.library.controller.command.RequestParameter.PASSWORD;
 import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.*;
 
 public class SignInCommand implements Command {

@@ -33,4 +33,6 @@ public final class RequestAttribute {
     public static final String GENRE_NAME = "name";
     public static final String BOOKS = "books";
     public static final String BOOK_GENRE_ID = "genre_id";
+    public static final String ISSUED_BOOKS = "issued_books";
+    public static final String ISSUE_TYPE = "issue_type";
 }

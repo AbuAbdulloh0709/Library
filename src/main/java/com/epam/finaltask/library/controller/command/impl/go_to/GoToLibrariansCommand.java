@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
-import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.ADMINISTRATORS;
 import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.LIBRARIANS;
 
 public class GoToLibrariansCommand implements Command {

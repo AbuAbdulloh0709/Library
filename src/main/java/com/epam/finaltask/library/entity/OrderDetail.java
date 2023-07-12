@@ -3,7 +3,7 @@ package com.epam.finaltask.library.entity;
 import com.epam.finaltask.library.entity.enums.OrderDetailStatus;
 
 public class OrderDetail extends AbstractEntity{
-    private Order order;
+    private int orderId;
     private User user;
     private OrderDetailStatus orderDetailStatus;
     private String comment;
@@ -11,20 +11,20 @@ public class OrderDetail extends AbstractEntity{
     public OrderDetail() {
     }
 
-    public OrderDetail(int id, Order order, User user, OrderDetailStatus status, String comment) {
+    public OrderDetail(int id, int orderId, User user, OrderDetailStatus status, String comment) {
         super(id);
-        this.order = order;
+        this.orderId = orderId;
         this.user = user;
         this.orderDetailStatus = status;
         this.comment = comment;
     }
 
-    public Order getOrder() {
-        return order;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public int getOrderId() {
+        return orderId;
     }
 
     public User getUser() {

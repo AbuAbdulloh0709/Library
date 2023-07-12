@@ -4,7 +4,6 @@ import com.epam.finaltask.library.entity.Image;
 import com.epam.finaltask.library.exception.DaoException;
 import com.epam.finaltask.library.model.dao.ImageDao;
 import com.epam.finaltask.library.model.dao.mapper.impl.ImageMapper;
-import com.epam.finaltask.library.model.dao.mapper.impl.UserMapper;
 import com.epam.finaltask.library.model.pool.ConnectionPool;
 
 import java.sql.PreparedStatement;

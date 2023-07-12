@@ -1,6 +1,5 @@
 package com.epam.finaltask.library.model.service.impl;
 
-import com.epam.finaltask.library.controller.command.RequestParameter;
 import com.epam.finaltask.library.entity.Order;
 import com.epam.finaltask.library.entity.OrderDetail;
 import com.epam.finaltask.library.entity.enums.OrderDetailStatus;
@@ -13,7 +12,9 @@ import com.epam.finaltask.library.util.DateDifference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.epam.finaltask.library.controller.command.RequestParameter.*;
 
@@ -49,8 +50,7 @@ public class OrderServiceImpl implements OrderService {
             int order_id = orderDao.add(order);
 
             OrderDetail orderDetail = new OrderDetail();
-            Order newOrder = orderDao.findById(order_id).get();
-            orderDetail.setOrder(newOrder);
+            orderDetail.setOrderId(order_id);
             orderDetail.setUser(userDao.findById(Integer.valueOf(orderMap.get(ORDER_DETAIL_USER_ID))).get());
             orderDetail.setOrderDetailStatus(OrderDetailStatus.valueOf(orderMap.get(ORDER_DETAIL_STATUS).toUpperCase()));
             orderDetail.setComment(orderMap.get(ORDER_DETAIL_COMMENT));
@@ -76,5 +76,60 @@ public class OrderServiceImpl implements OrderService {
                 LOGGER.error("Error has occurred while ending transaction for creating order: " + exception);
             }
         }
+    }
+
+    @Override
+    public List<Order> issuedBooks(int page) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        OrderDao orderDao = daoProvider.getOrderDao(false);
+        int startElementNumber = page * 15 - 15;
+        try {
+            return orderDao.issuedBooks(startElementNumber);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding issued books: " + exception);
+            throw new ServiceException("Error has occurred while finding issued books: ", exception);
+        } finally {
+            orderDao.closeConnection();
+        }
+    }
+
+    @Override
+    public List<Order> searchIssuedBooksByOrderTypeAndQuery(OrderType orderType, String search, int page) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        OrderDao orderDao = daoProvider.getOrderDao(false);
+        int startElementNumber = page * 15 - 15;
+        List<Order> list;
+        try {
+            if (orderType == null && search == null) {
+                list = orderDao.issuedBooks(startElementNumber);
+            } else if (orderType == null) {
+                list = orderDao.searchIssuedBooksByQuery(search, startElementNumber);
+            } else if (search == null) {
+                list = orderDao.searchIssuedBooksByOrderType(orderType, startElementNumber);
+            } else {
+                list = orderDao.searchIssuedBooksByOrderTypeAndQuery(orderType, search, startElementNumber);
+            }
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding issued books by Order Type and Search Query: " + exception);
+            throw new ServiceException("Error has occurred while finding issued books by Order Type and Search Query: ", exception);
+        } finally {
+            orderDao.closeConnection();
+        }
+        return list;
+    }
+
+    @Override
+    public Optional<Order> findOrderById(int id) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        OrderDao orderDao = daoProvider.getOrderDao(false);
+        OrderDetailDao orderDetailDao = daoProvider.getOrderDetailDao(false);
+        Optional<Order> order;
+        try {
+            order = orderDao.findById(id);
+//            order.get().setOrderDetails(orderDetailDao.f);
+        } catch (DaoException exception) {
+
+        }
+        return Optional.empty();
     }
 }

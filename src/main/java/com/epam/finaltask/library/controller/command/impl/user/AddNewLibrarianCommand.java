@@ -19,7 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.epam.finaltask.library.controller.command.RequestParameter.*;
-import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.*;
+import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.MESSAGE;
+import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.USER;
 
 public class AddNewLibrarianCommand implements Command {
     private static final Logger LOGGER = LogManager.getLogger();

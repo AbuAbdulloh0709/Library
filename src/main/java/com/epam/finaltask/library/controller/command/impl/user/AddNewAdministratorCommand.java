@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.epam.finaltask.library.controller.command.RequestParameter.*;
-import static com.epam.finaltask.library.controller.command.RequestParameter.LOGIN;
 import static com.epam.finaltask.library.controller.command.impl.RequestAttribute.*;
 
 public class AddNewAdministratorCommand implements Command {

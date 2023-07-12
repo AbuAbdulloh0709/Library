@@ -4,6 +4,7 @@ import com.epam.finaltask.library.entity.Book;
 import com.epam.finaltask.library.entity.Genre;
 import com.epam.finaltask.library.entity.Order;
 import com.epam.finaltask.library.entity.User;
+import com.epam.finaltask.library.entity.enums.OrderDetailStatus;
 import com.epam.finaltask.library.entity.enums.OrderType;
 import com.epam.finaltask.library.entity.enums.UserRole;
 import com.epam.finaltask.library.entity.enums.UserStatus;
@@ -31,7 +32,7 @@ public class OrderMapper implements BaseMapper<Order> {
         List<Order> orderList = new ArrayList<>();
         while (resultSet.next()) {
             Order order = new Order();
-            order.setId(resultSet.getInt(ColumnName.ORDER_ID));
+            order.setId(resultSet.getInt(ColumnName.ID));
 
             User user = new User();
             user.setId(resultSet.getInt(ORDER_USER_ID));
@@ -64,8 +65,9 @@ public class OrderMapper implements BaseMapper<Order> {
 
             order.setBook(book);
             order.setIssueDate(resultSet.getString(ORDER_ISSUE_DATE));
-            order.setIssueDate(resultSet.getString(ORDER_RETURN_DATE));
-            order.setIssueDate(resultSet.getString(ORDER_USAGE_DAYS));
+            order.setReturnDate(resultSet.getString(ORDER_RETURN_DATE));
+            order.setUsageDays(resultSet.getInt(ORDER_USAGE_DAYS));
+            order.setLastStatus(OrderDetailStatus.valueOf(resultSet.getString(ORDER_LAST_STATUS).toUpperCase()));
             order.setOrderType(OrderType.valueOf(resultSet.getString(ORDER_TYPE).toUpperCase()));
 
             orderList.add(order);

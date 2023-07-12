@@ -17,6 +17,8 @@ public class OrderDetailDaoImpl extends OrderDetailDao {
     private static final String SQL_INSERT_ORDER_DETAIL = "INSERT INTO order_details(order_id, user_id, status, comment) " +
             "values (?,?,?,?)";
 
+    private static final String SQL_ORDER_DETAILS = "Select * from view_order_details where order_id = ?";
+
     public OrderDetailDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
             connection = ConnectionPool.getInstance().getConnection();
@@ -24,11 +26,10 @@ public class OrderDetailDaoImpl extends OrderDetailDao {
     }
 
 
-
     @Override
     public int add(OrderDetail orderDetail) throws DaoException {
         try (PreparedStatement prepareStatement = connection.prepareStatement(SQL_INSERT_ORDER_DETAIL, Statement.RETURN_GENERATED_KEYS)) {
-            prepareStatement.setInt(1, orderDetail.getOrder().getId());
+            prepareStatement.setInt(1, orderDetail.getOrderId());
             prepareStatement.setInt(2, orderDetail.getUser().getId());
             prepareStatement.setString(3, orderDetail.getOrderDetailStatus().getStatus());
             prepareStatement.setString(4, orderDetail.getComment());
@@ -60,5 +61,18 @@ public class OrderDetailDaoImpl extends OrderDetailDao {
     @Override
     public Optional<OrderDetail> findById(Integer integer) throws DaoException {
         return Optional.empty();
+    }
+
+    @Override
+    public List<OrderDetail> findOrderDetailsByOrderId(int order_id) throws DaoException {
+        List<OrderDetail> orderDetails = null;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ORDER_DETAILS)) {
+            preparedStatement.setInt(1, order_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+//            orderDetails =
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        }
+        return orderDetails;
     }
 }

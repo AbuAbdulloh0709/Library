@@ -1,8 +1,10 @@
 package com.epam.finaltask.library.entity;
 
+import com.epam.finaltask.library.entity.enums.OrderDetailStatus;
 import com.epam.finaltask.library.entity.enums.OrderType;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Order extends AbstractEntity {
     private User user;
@@ -10,7 +12,9 @@ public class Order extends AbstractEntity {
     private String issueDate;
     private String returnDate;
     private int usageDays;
+    private OrderDetailStatus lastStatus;
     private OrderType orderType;
+    private List<OrderDetail> orderDetails;
 
     public Order() {
     }
@@ -71,5 +75,21 @@ public class Order extends AbstractEntity {
 
     public void setOrderType(OrderType orderType) {
         this.orderType = orderType;
+    }
+
+    public OrderDetailStatus getLastStatus() {
+        return lastStatus;
+    }
+
+    public void setLastStatus(OrderDetailStatus lastStatus) {
+        this.lastStatus = lastStatus;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
     }
 }
