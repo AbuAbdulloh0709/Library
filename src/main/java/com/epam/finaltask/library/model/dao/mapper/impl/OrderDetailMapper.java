@@ -2,6 +2,7 @@ package com.epam.finaltask.library.model.dao.mapper.impl;
 
 import com.epam.finaltask.library.entity.OrderDetail;
 import com.epam.finaltask.library.entity.User;
+import com.epam.finaltask.library.entity.enums.OrderDetailStatus;
 import com.epam.finaltask.library.entity.enums.UserRole;
 import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.model.dao.mapper.BaseMapper;
@@ -24,7 +25,7 @@ public class OrderDetailMapper implements BaseMapper<OrderDetail> {
             orderDetail.setOrderId(resultSet.getInt(ORDER_ID));
 
             User user = new User();
-            user.setId(resultSet.getInt(ORDER_USER_ID));
+            user.setId(resultSet.getInt(ORDER_DETAILS_USER_ID));
             user.setFirstName(resultSet.getString(USER_FIRST_NAME));
             user.setLastName(resultSet.getString(USER_LAST_NAME));
             user.setPassportNumber(resultSet.getString(USER_PASSPORT_NUMBER));
@@ -39,6 +40,7 @@ public class OrderDetailMapper implements BaseMapper<OrderDetail> {
             user.setCreatedAt(resultSet.getTimestamp(USER_CREATED_AT));
 
             orderDetail.setUser(user);
+            orderDetail.setOrderDetailStatus(OrderDetailStatus.valueOf(resultSet.getString(ORDER_DETAILS_STATUS).toUpperCase()));
             orderDetail.setComment(resultSet.getString(ORDER_DETAILS_COMMENT));
             orderDetail.setCreatedAt(resultSet.getTimestamp(ORDER_DETAILS_CREATED_AT));
 

@@ -6,4 +6,6 @@ import java.util.Map;
 
 public interface OrderDetailService {
     boolean returnIssuedBook(Map<String, String> orderDetailMap) throws ServiceException;
+    boolean acceptRequestedBook(Map<String, String> orderDetailMap) throws ServiceException;
+    boolean rejectRequest(Map<String, String> orderDetailMap) throws ServiceException;
 }

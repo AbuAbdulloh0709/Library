@@ -14,7 +14,11 @@ public interface OrderService {
 
     List<Order> issuedBooks(int page) throws ServiceException;
 
+    List<Order> requestedBooks(int page) throws ServiceException;
+
     List<Order> searchIssuedBooksByOrderTypeAndQuery(OrderType orderType, String search, int page) throws ServiceException;
+
+    List<Order> searchRequestedBooksByQuery(String search, int page) throws ServiceException;
 
     Optional<Order> findOrderById(int id) throws ServiceException;
 }

@@ -32,7 +32,7 @@ public class GoToIssuedBooksCommand implements Command {
         try {
             List<Order> issuedBooks = orderService.issuedBooks(page);
             List<Order> nextIssuedBooks = orderService.issuedBooks(page + 1);
-            request.setAttribute(RequestAttribute.ISSUED_BOOKS, issuedBooks);
+            request.setAttribute(RequestAttribute.ORDERS, issuedBooks);
             request.setAttribute(RequestAttribute.PAGE, page);
             request.setAttribute(RequestAttribute.LAST, nextIssuedBooks.isEmpty());
             return new Router(PagePath.VIEW_ALL_ISSUED_BOOKS, Router.RouterType.FORWARD);

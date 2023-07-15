@@ -70,7 +70,7 @@ public final class ColumnName {
     public static String ORDER_DETAILS_USER_ID = "user_id";
     public static String ORDER_DETAILS_ID = "order_details_id";
     public static String ORDER_DETAILS_STATUS = "order_details_status";
-    public static String ORDER_DETAILS_CREATED_AT = "order_details_status";
+    public static String ORDER_DETAILS_CREATED_AT = "order_details_created_at";
     public static String ORDER_DETAILS_USER_STATUS = "user_status";
     public static String ORDER_DETAILS_COMMENT = "comment";
 

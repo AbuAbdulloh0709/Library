@@ -3,6 +3,7 @@ package com.epam.finaltask.library.model.dao.impl;
 import com.epam.finaltask.library.entity.OrderDetail;
 import com.epam.finaltask.library.exception.DaoException;
 import com.epam.finaltask.library.model.dao.OrderDetailDao;
+import com.epam.finaltask.library.model.dao.mapper.impl.OrderDetailMapper;
 import com.epam.finaltask.library.model.pool.ConnectionPool;
 
 import java.sql.PreparedStatement;
@@ -69,9 +70,10 @@ public class OrderDetailDaoImpl extends OrderDetailDao {
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_ORDER_DETAILS)) {
             preparedStatement.setInt(1, order_id);
             ResultSet resultSet = preparedStatement.executeQuery();
-//            orderDetails =
+            orderDetails = new OrderDetailMapper().retrieve(resultSet);
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            LOGGER.error("Error has occurred while finding order details by order id: " + sqlException);
+            throw new DaoException("Error has occurred while finding order details by order id: ", sqlException);
         }
         return orderDetails;
     }

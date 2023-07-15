@@ -12,6 +12,7 @@ import com.epam.finaltask.library.util.DateDifference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,9 +55,11 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setUser(userDao.findById(Integer.valueOf(orderMap.get(ORDER_DETAIL_USER_ID))).get());
             orderDetail.setOrderDetailStatus(OrderDetailStatus.valueOf(orderMap.get(ORDER_DETAIL_STATUS).toUpperCase()));
             orderDetail.setComment(orderMap.get(ORDER_DETAIL_COMMENT));
+            orderDetail.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             orderDetailDao.add(orderDetail);
             if (orderDetail.getUser().getId() != order.getUser().getId()) {
                 orderDetail.setOrderDetailStatus(OrderDetailStatus.ACCEPTED);
+                orderDetail.setCreatedAt(new Timestamp(System.currentTimeMillis()));
                 orderDetailDao.add(orderDetail);
             }
             transaction.commit();
@@ -94,6 +97,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> requestedBooks(int page) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        OrderDao orderDao = daoProvider.getOrderDao(false);
+        int startElementNumber = page * 15 - 15;
+        try {
+            return orderDao.requestedBooks(startElementNumber);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding requested books: " + exception);
+            throw new ServiceException("Error has occurred while finding requested books: ", exception);
+        } finally {
+            orderDao.closeConnection();
+        }
+    }
+
+    @Override
     public List<Order> searchIssuedBooksByOrderTypeAndQuery(OrderType orderType, String search, int page) throws ServiceException {
         DaoProvider daoProvider = DaoProvider.getInstance();
         OrderDao orderDao = daoProvider.getOrderDao(false);
@@ -119,17 +137,46 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> searchRequestedBooksByQuery(String search, int page) throws ServiceException {
+        {
+            DaoProvider daoProvider = DaoProvider.getInstance();
+            OrderDao orderDao = daoProvider.getOrderDao(false);
+            int startElementNumber = page * 15 - 15;
+            List<Order> list;
+            try {
+                if (search == null) {
+                    list = orderDao.requestedBooks(startElementNumber);
+                } else {
+                    list = orderDao.searchRequestedBooksByQuery(search, startElementNumber);
+                }
+            } catch (DaoException exception) {
+                LOGGER.error("Error has occurred while finding requested books by Search Query: " + exception);
+                throw new ServiceException("Error has occurred while finding requested books by Search Query: ", exception);
+            } finally {
+                orderDao.closeConnection();
+            }
+            return list;
+        }
+    }
+
+    @Override
     public Optional<Order> findOrderById(int id) throws ServiceException {
         DaoProvider daoProvider = DaoProvider.getInstance();
         OrderDao orderDao = daoProvider.getOrderDao(false);
+        ImageDao imageDao = daoProvider.getImageDao(false);
         OrderDetailDao orderDetailDao = daoProvider.getOrderDetailDao(false);
         Optional<Order> order;
         try {
             order = orderDao.findById(id);
-//            order.get().setOrderDetails(orderDetailDao.f);
+            order.get().setOrderDetails(orderDetailDao.findOrderDetailsByOrderId(id));
+            order.get().getBook().setImages(imageDao.getImagesByBook(order.get().getBook().getId()));
         } catch (DaoException exception) {
-
+            LOGGER.error("Error has occurred while finding order with order details: " + exception);
+            throw new ServiceException("Error has occurred while finding order with order details: ", exception);
+        } finally {
+            orderDao.closeConnection();
+            orderDetailDao.closeConnection();
         }
-        return Optional.empty();
+        return order;
     }
 }

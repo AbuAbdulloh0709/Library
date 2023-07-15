@@ -12,4 +12,12 @@ public enum OrderType {
     public String getType(){
         return this.toString().toLowerCase();
     }
+
+    public String getOrderType(){
+        if (this.getType().equals("in_room")){
+            return "In Room";
+        } else {
+            return "Borrow";
+        }
+    }
 }

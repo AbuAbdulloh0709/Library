@@ -14,7 +14,7 @@
 <c:set var="all_books" value="inactive"/>
 <c:set var="book_genre" value="inactive"/>
 <c:set var="add_books" value="inactive"/>
-<c:set var="student_request_books" value="inactive"/>
+<c:set var="requested_books" value="inactive"/>
 <c:set var="issued_books" value="inactive"/>
 <c:set var="books_to_issue" value="inactive"/>
 
@@ -46,8 +46,8 @@
     <c:when test="${currentPath.contains('add_books.jsp')}">
         <c:set var="add_books" value="active"/>
     </c:when>
-    <c:when test="${currentPath.contains('student_request_books.jsp')}">
-        <c:set var="student_request_books" value="active"/>
+    <c:when test="${currentPath.contains('requested_books.jsp')}">
+        <c:set var="requested_books" value="active"/>
     </c:when>
     <c:when test="${currentPath.contains('all_issued_books.jsp')}">
         <c:set var="issued_books" value="active"/>
@@ -104,8 +104,8 @@
             </a>
         </li>
         <li>
-            <a class="${student_request_books}" href="${pageContext.request.contextPath}/controller?command=go_to_student_request_books">
-                <fmt:message key="admin.dashboard.student_request_books"/>
+            <a class="${requested_books}" href="${pageContext.request.contextPath}/controller?command=go_to_requested_books">
+                <fmt:message key="admin.dashboard.requested_books"/>
             </a>
         </li>
         <li>

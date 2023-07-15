@@ -41,7 +41,7 @@ public class SearchIssuedBooksCommand implements Command {
         try {
             List<Order> issuedBooks = orderService.searchIssuedBooksByOrderTypeAndQuery(issueType == null ? null : OrderType.valueOf(issueType.toUpperCase()), searchText, page);
             List<Order> nextIssuedBooks = orderService.searchIssuedBooksByOrderTypeAndQuery(issueType == null ? null : OrderType.valueOf(issueType.toUpperCase()), searchText, page + 1);
-            request.setAttribute(RequestAttribute.ISSUED_BOOKS, issuedBooks);
+            request.setAttribute(RequestAttribute.ORDERS, issuedBooks);
             request.setAttribute(RequestAttribute.SEARCH_TEXT,searchText);
             request.setAttribute(RequestAttribute.ISSUE_TYPE,issueType);
             request.setAttribute(RequestAttribute.PAGE, page);

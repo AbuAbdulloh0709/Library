@@ -54,48 +54,36 @@
                     </div>
                 </form>
                 <div>
-                    <c:if test="${fn:length(requestScope.issued_books) > 0}">
+                    <c:if test="${fn:length(requestScope.orders) > 0}">
                         <table>
                             <thead>
                             <tr>
-                                <th>Book</th>
-                                <th>Student</th>
-                                <th>Issue Type</th>
-                                <th>Issue Date</th>
-                                <th>Return Date</th>
+                                <th><fmt:message key="issue.book"></fmt:message></th>
+                                <th><fmt:message key="issue.student"></fmt:message></th>
+                                <th><fmt:message key="issue.issue_type"></fmt:message></th>
+                                <th><fmt:message key="issue.issue_date"></fmt:message></th>
+                                <th><fmt:message key="issue.return_date"></fmt:message></th>
                                 <th></th>
                                 <th></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach var="issued_book" items="${requestScope.issued_books}">
-                                <%--                                <c:set var="color" value="#fff"/>--%>
-                                <%--                                <c:choose>--%>
-                                <%--                                    <c:when test="${student.status.status == 'active'}">--%>
-                                <%--                                        <c:set var="color" value="#fff"/>--%>
-                                <%--                                    </c:when>--%>
-                                <%--                                    <c:when test="${student.status.status == 'inactive'}">--%>
-                                <%--                                        <c:set var="color" value="#e79a66"/>--%>
-                                <%--                                    </c:when>--%>
-                                <%--                                    <c:otherwise>--%>
-                                <%--                                        <c:set var="color" value="#ee8989"/>--%>
-                                <%--                                    </c:otherwise>--%>
-                                <%--                                </c:choose>--%>
+                            <c:forEach var="order" items="${requestScope.orders}">
                                 <tr style="background-color: ${color}">
-                                    <td>${issued_book.book.title}</td>
-                                    <td>${issued_book.user.fullName}</td>
-                                    <td>${issued_book.orderType.type}</td>
-                                    <td>${issued_book.issueDate}</td>
-                                    <td>${issued_book.returnDate}</td>
+                                    <td>${order.book.title}</td>
+                                    <td>${order.user.fullName}</td>
+                                    <td>${order.orderType.orderType}</td>
+                                    <td>${order.issueDate}</td>
+                                    <td>${order.returnDate}</td>
                                     <td>
                                         <div>
-                                            <a href="${pageContext.request.contextPath}/controller?command=return_issued_book&id=${issued_book.id}&page=${page}&issue_type=${issue_type}&search_text=${search_text}"
+                                            <a href="${pageContext.request.contextPath}/controller?command=return_issued_book&id=${order.id}&page=${page}&issue_type=${issue_type}&search_text=${search_text}"
                                                class="return-button">Return</a>
                                         </div>
                                     </td>
                                     <td>
                                         <div>
-                                            <a href="${pageContext.request.contextPath}/controller?command=change_user_status&id=${student.id}&new_status=blocked&page=${page}&status=${status}&search_text=${search_text}"
+                                            <a href="${pageContext.request.contextPath}/controller?command=view_issued_book_details&order_id=${order.id}"
                                                class="view-button">View</a>
                                         </div>
                                     </td>
@@ -106,28 +94,6 @@
                         <ctg:issued_books page="${page}" last="${last}"
                                    search_text="${requestScope.search_text}" issue_type="${requestScope.issue_type}"
                                    command="search_issued_books"/>
-<%--                        <c:choose>--%>
-<%--                            <c:when test="${not empty requestScope.issue_type or not empty requestScope.search_text}">--%>
-<%--                                <ctg:pages page="${page}" last="${last}"--%>
-<%--                                           search_text="${requestScope.search_text}"--%>
-<%--                                           status="${requestScope.status}"--%>
-<%--                                           command="search_students"/>--%>
-<%--                            </c:when>--%>
-<%--                            <c:when test="${not empty requestScope.status}">--%>
-<%--                                <ctg:pages page="${page}" last="${last}"--%>
-<%--                                           status="${requestScope.status}"--%>
-<%--                                           command="search_students"/>--%>
-<%--                            </c:when>--%>
-<%--                            <c:when test="${not empty requestScope.search_text}">--%>
-<%--                                <ctg:pages page="${page}" last="${last}"--%>
-<%--                                           search_text="${requestScope.search_text}"--%>
-<%--                                           command="search_students"/>--%>
-<%--                            </c:when>--%>
-<%--                            <c:otherwise>--%>
-<%--                                <ctg:pages page="${page}" last="${last}"--%>
-<%--                                           command="go_to_all_students"/>--%>
-<%--                            </c:otherwise>--%>
-<%--                        </c:choose>--%>
                     </c:if>
                 </div>
             </div>
