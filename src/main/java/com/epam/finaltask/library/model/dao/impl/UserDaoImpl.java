@@ -22,6 +22,8 @@ public class UserDaoImpl extends UserDao {
     private static final String SQL_INSERT_USER = "INSERT INTO users(login, first_name, last_name, passport_number, email, role, address, birth_date, status, phone_number) " +
             "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+    private static final String SQL_UPDATE_USER_DETAILS = "Update users set first_name =?,last_name=?, passport_number=?, email=?, address=?, birth_date=?, phone_number=? where id = ?";
+
     private static final String SQL_SELECT_USERS_BY_LOGIN =
             "SELECT * FROM users WHERE login = ?";
 
@@ -108,7 +110,21 @@ public class UserDaoImpl extends UserDao {
 
     @Override
     public boolean update(User user) throws DaoException {
-        return false;
+        try (PreparedStatement prepareStatement = connection.prepareStatement(SQL_UPDATE_USER_DETAILS)) {
+            prepareStatement.setString(1, user.getFirstName());
+            prepareStatement.setString(2, user.getLastName());
+            prepareStatement.setString(3, user.getPassportNumber());
+            prepareStatement.setString(4, user.getEmail());
+            prepareStatement.setString(5, user.getAddress());
+            prepareStatement.setString(6, user.getBirthDate());
+            prepareStatement.setString(7, user.getPhoneNumber().toString());
+            prepareStatement.setInt(8, user.getId());
+            prepareStatement.execute();
+            return true;
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while updating user: " + sqlException);
+            throw new DaoException("Error has occurred while updating user: ", sqlException);
+        }
     }
 
     @Override

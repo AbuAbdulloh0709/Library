@@ -32,7 +32,6 @@ public class AddNewLibrarianCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
         Map<String, String> userData = new HashMap<>();
         userData.put(LOGIN, request.getParameter(LOGIN));
         userData.put(EMAIL, request.getParameter(EMAIL));
@@ -63,17 +62,16 @@ public class AddNewLibrarianCommand implements Command {
                 return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
             }
             if (userService.registerUser(userData, UserRole.LIBRARIAN, UserStatus.ACTIVE)) {
-//                request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
+                request.setAttribute(MESSAGE, SIGN_UP_CONFIRM_MESSAGE_KEY);
                 librarians = userService.findUsers(UserRole.LIBRARIAN);
                 request.setAttribute(PagePath.LIBRARIANS, librarians);
-                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
             } else {
                 request.setAttribute(USER, userData);
                 request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);
-                return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
             }
+            return new Router(PagePath.LIBRARIANS, Router.RouterType.FORWARD);
         } catch (ServiceException e) {
-            LOGGER.error("Error has occurred while signing in: " + e);
+            LOGGER.error("Error has occurred while adding new librarian: " + e);
             return new Router(PagePath.ERROR_404, Router.RouterType.REDIRECT);
         }
     }

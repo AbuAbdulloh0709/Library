@@ -62,4 +62,7 @@ public final class RequestParameter {
     public static final String ISSUE_TYPE = "issue_type";
     public static final String ORDER_ID = "order_id";
     public static final String ORDER = "order";
+    public static final String FROM_DATE = "from_date";
+    public static final String TO_DATE = "to_date";
+    public static final String OLD_IMAGE_PATH = "image_path";
 }

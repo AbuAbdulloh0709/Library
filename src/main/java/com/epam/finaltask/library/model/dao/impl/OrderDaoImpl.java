@@ -22,13 +22,23 @@ public class OrderDaoImpl extends OrderDao {
 
     private static final String SQL_SELECT_REQUESTED_BOOKS = "SELECT * from view_orders as orders where orders.last_status = 'created' LIMIT 15 OFFSET ?";
 
+    private static final String SQL_SELECT_ORDER_HISTORY = "SELECT * from view_orders as orders where orders.last_status = 'returned' or orders.last_status = 'canceled' LIMIT 15 OFFSET ?";
+
+    private static final String SQL_SELECT_ORDER_HISTORY_WITHOUT_PAGING = "SELECT * from view_orders as orders where orders.last_status = 'returned' or orders.last_status = 'canceled' ";
+
     private static final String SQL_SELECT_ORDERS_BY_ORDER_TYPE = "SELECT * from view_orders as orders where orders.last_status = 'accepted' and orders.type = ? LIMIT 15 OFFSET ?";
 
-    private static final String SQL_SELECT_ORDERS_BY_ORDER_TYPE_AND_SEARCH_QUERY = "SELECT * from view_orders as orders where orders.last_status = 'accepted' and orders.type = ? and (users.first_name like '%' || ? || '%' or users.last_name like '%' || ? || '%' or books.title like '%' || ? || '%') LIMIT 15 OFFSET ?";
+    private static final String SQL_SELECT_ORDERS_BY_ORDER_TYPE_AND_SEARCH_QUERY = "SELECT * from view_orders as orders where orders.last_status = 'accepted' and orders.type = ? and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%') LIMIT 15 OFFSET ?";
 
-    private static final String SQL_SELECT_ORDERS_BY_SEARCH_QUERY = "SELECT * from view_orders as orders where orders.last_status = 'accepted' and (users.first_name like '%' || ? || '%' or users.last_name like '%' || ? || '%' or books.title like '%' || ? || '%') LIMIT 15 OFFSET ?";
+    private static final String SQL_SELECT_ORDERS_BY_SEARCH_QUERY = "SELECT * from view_orders as orders where orders.last_status = 'accepted' and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%') LIMIT 15 OFFSET ?";
 
-    private static final String SQL_SELECT_REQUESTS_BY_SEARCH_QUERY = "SELECT * from view_orders as orders where orders.last_status = 'created' and (users.first_name like '%' || ? || '%' or users.last_name like '%' || ? || '%' or books.title like '%' || ? || '%') LIMIT 15 OFFSET ?";
+    private static final String SQL_SELECT_REQUESTS_BY_SEARCH_QUERY = "SELECT * from view_orders as orders where orders.last_status = 'created' and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%') LIMIT 15 OFFSET ?";
+
+    private static final String SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%')";
+
+    private static final String SQL_SELECT_ORDER_HISTORY_BY_DATE = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (issue_date between ? and ?)";
+
+    private static final String SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY_AND_DATE = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (issue_date between ? and ?) and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%')";
 
     public OrderDaoImpl() {
     }
@@ -119,6 +129,35 @@ public class OrderDaoImpl extends OrderDao {
     }
 
     @Override
+    public List<Order> orderHistory(int startElementNumber) throws DaoException {
+        List<Order> orders;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY)) {
+            preparedStatement.setInt(1, startElementNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            OrderMapper bookMapper = OrderMapper.getInstance();
+            orders = bookMapper.retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding order history: " + sqlException);
+            throw new DaoException("Error has occurred while finding order history: ", sqlException);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> orderHistory() throws DaoException {
+        List<Order> orders;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_WITHOUT_PAGING)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            OrderMapper bookMapper = OrderMapper.getInstance();
+            orders = bookMapper.retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding order history: " + sqlException);
+            throw new DaoException("Error has occurred while finding order history: ", sqlException);
+        }
+        return orders;
+    }
+
+    @Override
     public List<Order> searchIssuedBooksByOrderType(OrderType orderType, int startElementNumber) throws DaoException {
         List<Order> orders;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDERS_BY_ORDER_TYPE)) {
@@ -185,6 +224,58 @@ public class OrderDaoImpl extends OrderDao {
         } catch (SQLException sqlException) {
             LOGGER.error("Error has occurred while finding orders by order type and search query: " + sqlException);
             throw new DaoException("Error has occurred while finding orders by order type and search query: ", sqlException);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> searchHistoryByQuery(String searchQuery) throws DaoException {
+        List<Order> orders;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY)) {
+            preparedStatement.setString(1, searchQuery);
+            preparedStatement.setString(2, searchQuery);
+            preparedStatement.setString(3, searchQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            OrderMapper bookMapper = OrderMapper.getInstance();
+            orders = bookMapper.retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding order history by search query: " + sqlException);
+            throw new DaoException("Error has occurred while finding order history by search query: ", sqlException);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> searchHistoryByDate(String from, String to) throws DaoException {
+        List<Order> orders;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_BY_DATE)) {
+            preparedStatement.setDate(1, Date.valueOf(from));
+            preparedStatement.setDate(2, Date.valueOf(to));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            OrderMapper bookMapper = OrderMapper.getInstance();
+            orders = bookMapper.retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding order history by date: " + sqlException);
+            throw new DaoException("Error has occurred while finding order history by date: ", sqlException);
+        }
+        return orders;
+    }
+
+    @Override
+    public List<Order> searchHistoryByDateAndQuery(String from, String to, String search_text) throws DaoException {
+        List<Order> orders;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY_AND_DATE)) {
+            preparedStatement.setDate(1, Date.valueOf(from));
+            preparedStatement.setDate(2, Date.valueOf(to));
+            preparedStatement.setString(3, search_text);
+            preparedStatement.setString(4, search_text);
+            preparedStatement.setString(5, search_text);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            OrderMapper bookMapper = OrderMapper.getInstance();
+            orders = bookMapper.retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding order history by date and search query: " + sqlException);
+            throw new DaoException("Error has occurred while finding order history by date and search query: ", sqlException);
         }
         return orders;
     }

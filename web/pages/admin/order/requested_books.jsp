@@ -27,7 +27,7 @@
         <section>
             <div>
                 <form id="searchForm" method="post"
-                      action="${pageContext.request.contextPath}/controller?command=search_issued_books">
+                      action="${pageContext.request.contextPath}/controller?command=search_requests">
                     <div id="search">
                         <div id="issue_type">
                             <input type="text" name="search_text" value="${requestScope.search_text}" placeholder=
@@ -35,7 +35,7 @@
                                     key="user.search.placeholder"/>>
                         </div>
                         <input type="button" name="clear" value="<fmt:message key="user.clear"/>"
-                               onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_issued_books'">
+                               onclick="location.href='${pageContext.request.contextPath}/controller?command=go_to_requests'">
                         <input type="submit" value="<fmt:message key="user.search"/>">
                     </div>
                 </form>

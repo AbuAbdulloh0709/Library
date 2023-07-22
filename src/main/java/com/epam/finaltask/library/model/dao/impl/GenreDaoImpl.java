@@ -1,8 +1,10 @@
 package com.epam.finaltask.library.model.dao.impl;
 
+import com.epam.finaltask.library.entity.Book;
 import com.epam.finaltask.library.entity.Genre;
 import com.epam.finaltask.library.exception.DaoException;
 import com.epam.finaltask.library.model.dao.GenreDao;
+import com.epam.finaltask.library.model.dao.mapper.impl.BookMapper;
 import com.epam.finaltask.library.model.dao.mapper.impl.GenreMapper;
 import com.epam.finaltask.library.model.pool.ConnectionPool;
 
@@ -17,6 +19,8 @@ public class GenreDaoImpl extends GenreDao {
 
     private static final String SQL_INSERT_GENRE = "INSERT INTO genres(name) " +
             "values (?)";
+    private static final String SQL_SELECT_GENRES_BY_ID =
+            "SELECT * FROM genres WHERE id = ?";
     private static final String SQL_SELECT_GENRES_BY_NAME =
             "SELECT * FROM genres WHERE name = ?";
     private static final String SQL_SELECT_GENRES =
@@ -76,8 +80,18 @@ public class GenreDaoImpl extends GenreDao {
     }
 
     @Override
-    public Optional<Genre> findById(Integer integer) throws DaoException {
-        return Optional.empty();
+    public Optional<Genre> findById(Integer id) throws DaoException {
+        List<Genre> genres;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_GENRES_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            GenreMapper genreMapper = GenreMapper.getInstance();
+            genres = genreMapper.retrieve(resultSet);
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding genre by id: " + sqlException);
+            throw new DaoException("Error has occurred while finding genre by id: ", sqlException);
+        }
+        return genres.isEmpty() ? Optional.empty() : Optional.of(genres.get(0));
     }
 
     @Override

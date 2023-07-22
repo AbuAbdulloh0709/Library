@@ -1,5 +1,6 @@
 package com.epam.finaltask.library.model.service;
 
+import com.epam.finaltask.library.entity.Book;
 import com.epam.finaltask.library.entity.Genre;
 import com.epam.finaltask.library.exception.ServiceException;
 

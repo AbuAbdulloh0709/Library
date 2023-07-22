@@ -64,6 +64,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findUserById(int id) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            return userDao.findById(id);
+        } catch (DaoException e) {
+            LOGGER.error("Error has occurred while searching for user with id \"{}\": {}", id, e);
+            throw new ServiceException("Error has occurred while searching for user with email \"" + id + "\": ", e);
+        } finally {
+            userDao.closeConnection();
+        }
+    }
+
+    @Override
     public Optional<User> findUserByEmail(String email) throws ServiceException {
         DaoProvider daoProvider = DaoProvider.getInstance();
         UserDao userDao = daoProvider.getUserDao(false);
@@ -140,7 +154,7 @@ public class UserServiceImpl implements UserService {
                     user.setBirthDate(userData.get(BIRTH_DATE));
                     user.setStatus(userStatus);
                     user.setLogin(userData.get(LOGIN));
-                    user.setPassword(userData.get(LOGIN));
+                    user.setPassword(userData.get(PASSWORD));
                     user.setPhoneNumber(number);
                     userDao.add(user);
                     userDao.updateUserPassword(password.get(), userData.get(LOGIN));
@@ -163,6 +177,30 @@ public class UserServiceImpl implements UserService {
             } catch (DaoException exception) {
                 LOGGER.error("Error has occurred while ending transaction for registering user: " + exception);
             }
+        }
+    }
+
+    @Override
+    public boolean updateUserDetails(Map<String, String> userData) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            BigInteger number = new BigInteger(
+                    userData.get(PHONE_NUMBER).replaceAll(NUMBER_REMOVING_SYMBOLS_REGEX, NUMBER_REPLACEMENT_REGEX));
+            User user = new User();
+            user.setId(Integer.parseInt(userData.get(ID)));
+            user.setFirstName(userData.get(FIRSTNAME));
+            user.setLastName(userData.get(LASTNAME));
+            user.setPassportNumber(userData.get(PASSPORT_NUMBER));
+            user.setEmail(userData.get(EMAIL));
+            user.setAddress(userData.get(ADDRESS));
+            user.setBirthDate(userData.get(BIRTH_DATE));
+            user.setPhoneNumber(number);
+            userDao.update(user);
+            return true;
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while updating user details: " + exception);
+            throw new ServiceException("Error has occurred while updating user details: ", exception);
         }
     }
 

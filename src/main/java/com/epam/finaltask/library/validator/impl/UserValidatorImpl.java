@@ -14,8 +14,8 @@ public class UserValidatorImpl implements UserValidator {
     private static final String FIRSTNAME_REGEX = "[A-Z\\p{Upper}][a-z\\p{Lower}]{1,15}";
     private static final String PASSPORT_REGEX = "^[A-Z]{2}\\d{7}";
     private static final String EMAIL_REGEX = "(([\\p{Alpha}\\d._]+){5,25}@([\\p{Lower}]+){3,7}\\.([\\p{Lower}]+){2,3})";
-//    private static final String NUMBER_REGEX = "\\+998\\(\\d{2}\\)\\d{3}-\\d{2}-\\d{2}";
-    private static final String NUMBER_REGEX = "\\+998\\d{9}";
+    private static final String NUMBER_REGEX = "\\+998\\(\\d{2}\\)\\d{3}-\\d{2}-\\d{2}";
+//    private static final String NUMBER_REGEX = "\\+998\\d{9}";
     private static final UserValidator instance = new UserValidatorImpl();
 
     private UserValidatorImpl() {

@@ -13,6 +13,8 @@ public interface UserService {
 
     Optional<User> findUser(String login, String password) throws ServiceException;
 
+    Optional<User> findUserById(int id) throws ServiceException;
+
     Optional<User> findUserByEmail(String email) throws ServiceException;
 
     Optional<User> findUserByPassport(String passport) throws ServiceException;
@@ -22,6 +24,8 @@ public interface UserService {
     List<User> findUsers(UserRole userRole) throws ServiceException;
 
     boolean registerUser(Map<String, String> userData, UserRole userRole, UserStatus userStatus) throws ServiceException;
+
+    boolean updateUserDetails(Map<String, String> userData) throws ServiceException;
 
     boolean isLoginOccupied(String login) throws ServiceException;
 

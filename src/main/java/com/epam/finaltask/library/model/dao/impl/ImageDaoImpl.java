@@ -18,6 +18,8 @@ public class ImageDaoImpl extends ImageDao {
     private static final String SQL_INSERT_IMAGE = "INSERT INTO images (book_id, url) " +
             "values (?,?)";
 
+    private static final String SQL_UPDATE_IMAGE = "UPDATE images set url=? WHERE id=?";
+
     private static final String SQL_IMAGES_BY_BOOK = "Select * from images where book_id = ?";
 
     public ImageDaoImpl(boolean isTransaction) {
@@ -43,7 +45,15 @@ public class ImageDaoImpl extends ImageDao {
 
     @Override
     public boolean update(Image image) throws DaoException {
-        return false;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE_IMAGE)) {
+            preparedStatement.setString(1, image.getUrl());
+            preparedStatement.setInt(2, image.getId());
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while replacing image: " + sqlException);
+            throw new DaoException("Error has occurred while replacing image: ", sqlException);
+        }
     }
 
     @Override

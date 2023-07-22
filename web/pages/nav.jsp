@@ -17,6 +17,7 @@
 <c:set var="requested_books" value="inactive"/>
 <c:set var="issued_books" value="inactive"/>
 <c:set var="books_to_issue" value="inactive"/>
+<c:set var="history" value="inactive"/>
 
 <c:choose>
     <c:when test="${currentPath.contains('dashboard.jsp')}">
@@ -54,6 +55,9 @@
     </c:when>
     <c:when test="${currentPath.contains('books_to_issue.jsp')}">
         <c:set var="books_to_issue" value="active"/>
+    </c:when>
+    <c:when test="${currentPath.contains('history.jsp')}">
+        <c:set var="history" value="active"/>
     </c:when>
 </c:choose>
 
@@ -104,7 +108,7 @@
             </a>
         </li>
         <li>
-            <a class="${requested_books}" href="${pageContext.request.contextPath}/controller?command=go_to_requested_books">
+            <a class="${requested_books}" href="${pageContext.request.contextPath}/controller?command=go_to_requests">
                 <fmt:message key="admin.dashboard.requested_books"/>
             </a>
         </li>
@@ -116,6 +120,11 @@
         <li>
             <a class="${books_to_issue}" href="${pageContext.request.contextPath}/controller?command=go_to_books_to_issue">
                 <fmt:message key="admin.dashboard.books_to_issue"/>
+            </a>
+        </li>
+        <li>
+            <a class="${history}" href="${pageContext.request.contextPath}/controller?command=go_to_history">
+                <fmt:message key="admin.dashboard.history"/>
             </a>
         </li>
     </ul>

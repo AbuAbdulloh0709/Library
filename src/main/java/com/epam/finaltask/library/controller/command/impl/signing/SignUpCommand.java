@@ -31,7 +31,6 @@ public class SignUpCommand implements Command {
 
     @Override
     public Router execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
         Map<String, String> userData = new HashMap<>();
         userData.put(LOGIN, request.getParameter(LOGIN));
         userData.put(EMAIL, request.getParameter(EMAIL));
@@ -47,12 +46,12 @@ public class SignUpCommand implements Command {
         try {
             if (userService.isEmailOccupied(userData.get(EMAIL))) {
                 request.setAttribute(USER, userData);
-                session.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
+                request.setAttribute(MESSAGE, EMAIL_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
             if (userService.isLoginOccupied(userData.get(LOGIN))) {
                 request.setAttribute(USER, userData);
-                session.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
+                request.setAttribute(MESSAGE, LOGIN_AVAILABILITY_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
             if (userService.registerUser(userData, UserRole.STUDENT, UserStatus.INACTIVE)) {
@@ -60,7 +59,7 @@ public class SignUpCommand implements Command {
                 return new Router(PagePath.HOME, Router.RouterType.FORWARD);
             } else {
                 request.setAttribute(USER, userData);
-                session.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);
+                request.setAttribute(MESSAGE, SIGN_UP_ERROR_MESSAGE_KEY);
                 return new Router(PagePath.SIGN_UP, Router.RouterType.FORWARD);
             }
         } catch (ServiceException e) {

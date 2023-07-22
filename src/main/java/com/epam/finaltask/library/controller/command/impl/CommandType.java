@@ -2,16 +2,17 @@ package com.epam.finaltask.library.controller.command.impl;
 
 import com.epam.finaltask.library.controller.command.Command;
 import com.epam.finaltask.library.controller.command.impl.book.AddBookCommand;
+import com.epam.finaltask.library.controller.command.impl.book.EditBookInfoBookCommand;
+import com.epam.finaltask.library.controller.command.impl.book.ReplaceBookImageCommand;
+import com.epam.finaltask.library.controller.command.impl.book.SearchBooksCommand;
 import com.epam.finaltask.library.controller.command.impl.orders.*;
 import com.epam.finaltask.library.controller.command.impl.genre.AddBookGenreCommand;
 import com.epam.finaltask.library.controller.command.impl.genre.EditBookGenreCommand;
 import com.epam.finaltask.library.controller.command.impl.go_to.*;
 import com.epam.finaltask.library.controller.command.impl.signing.SignInCommand;
+import com.epam.finaltask.library.controller.command.impl.signing.SignOutCommand;
 import com.epam.finaltask.library.controller.command.impl.signing.SignUpCommand;
-import com.epam.finaltask.library.controller.command.impl.user.AddNewAdministratorCommand;
-import com.epam.finaltask.library.controller.command.impl.user.AddNewLibrarianCommand;
-import com.epam.finaltask.library.controller.command.impl.user.ChangeUserStatusCommand;
-import com.epam.finaltask.library.controller.command.impl.user.SearchUsersCommand;
+import com.epam.finaltask.library.controller.command.impl.user.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,13 +30,16 @@ public enum CommandType {
     GO_TO_ALL_BOOKS(new GoToAllBooksCommand()),
     GO_TO_ADD_BOOK_GENRE(new GoToAddBookGenreCommand()),
     GO_TO_ADD_BOOKS(new GoToAddBookCommand()),
-    GO_TO_REQUESTED_BOOKS(new GoToStudentRequestBooksCommand()),
     GO_TO_ISSUED_BOOKS(new GoToIssuedBooksCommand()),
+    GO_TO_REQUESTS(new GoToStudentRequestBooksCommand()),
     GO_TO_SHOW_BOOKS_FOR_GUEST(new GoToShowBooksForGuestCommand()),
     GO_TO_BOOKS_TO_ISSUE(new GoToBooksToIssueCommand()),
     GO_TO_ISSUE_BOOK_BY_STUDENT(new GoToIssueBookByStudentCommand()),
     GO_TO_ISSUE_BOOK(new GoToIssueBookCommand()),
-
+    GO_TO_HISTORY(new GoToHistoryCommand()),
+    GO_TO_EDIT_BOOK_INFO(new GoToEditBookInfoCommand()),
+    GO_TO_REPLACE_BOOK_IMAGE(new GoToReplaceImageCommand()),
+    GO_TO_PROFILE(new GoToProfileCommand()),
 
 
     SIGN_UP(new SignUpCommand()),
@@ -54,6 +58,13 @@ public enum CommandType {
     VIEW_ISSUED_BOOK_DETAILS(new ViewIssuedBookDetailsCommand()),
     REJECT_REQUEST(new RejectCommand()),
     ACCEPT_REQUEST(new AcceptCommand()),
+    SEARCH_REQUESTS(new SearchRequestsCommand()),
+    SEARCH_HISTORY(new SearchHistoryCommand()),
+    EDIT_BOOK_INFO(new EditBookInfoBookCommand()),
+    SEARCH_BOOKS(new SearchBooksCommand()),
+    REPLACE_BOOK_IMAGE(new ReplaceBookImageCommand()),
+    SIGN_OUT(new SignOutCommand()),
+    UPDATE_USER_DETAILS(new UpdateUserProfileCommand()),
     DEFAULT(new DefaultCommand());
 
 

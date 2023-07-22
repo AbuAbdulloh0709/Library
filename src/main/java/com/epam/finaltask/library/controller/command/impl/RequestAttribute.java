@@ -37,4 +37,7 @@ public final class RequestAttribute {
     public static final String ISSUE_TYPE = "issue_type";
     public static final String ORDERS = "orders";
     public static final String ORDER = "order";
+    public static final String FROM_DATE = "from_date";
+    public static final String TO_DATE = "to_date";
+    public static final String BOOK = "book";
 }

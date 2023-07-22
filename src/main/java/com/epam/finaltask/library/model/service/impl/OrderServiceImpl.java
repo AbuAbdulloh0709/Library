@@ -97,6 +97,43 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> orderHistory(int page) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        OrderDao orderDao = daoProvider.getOrderDao(false);
+        int startElementNumber = page * 15 - 15;
+        try {
+            return orderDao.orderHistory(startElementNumber);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding order history: " + exception);
+            throw new ServiceException("Error has occurred while finding order history: ", exception);
+        } finally {
+            orderDao.closeConnection();
+        }
+    }
+
+    @Override
+    public List<Order> searchOrderHistory(String from, String to, String search_text) throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        OrderDao orderDao = daoProvider.getOrderDao(false);
+        try {
+            if ((from == null || to == null) && search_text == null) {
+                return orderDao.orderHistory();
+            } else if (from == null || to == null) {
+                return orderDao.searchHistoryByQuery(search_text);
+            } else if (search_text == null) {
+                return orderDao.searchHistoryByDate(from, to);
+            } else {
+                return orderDao.searchHistoryByDateAndQuery(from, to, search_text);
+            }
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while searching order history: " + exception);
+            throw new ServiceException("Error has occurred while searching order history: ", exception);
+        } finally {
+            orderDao.closeConnection();
+        }
+    }
+
+    @Override
     public List<Order> requestedBooks(int page) throws ServiceException {
         DaoProvider daoProvider = DaoProvider.getInstance();
         OrderDao orderDao = daoProvider.getOrderDao(false);

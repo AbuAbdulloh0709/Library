@@ -73,6 +73,11 @@
         <tag-class>com.epam.finaltask.library.tag.BooksPagesTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
+            <name>search_text</name>
+            <rtexprvalue>true</rtexprvalue>
+            <type>int</type>
+        </attribute>
+        <attribute>
             <name>page</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>

@@ -44,6 +44,7 @@ public class BooksPagesTag extends TagSupport {
         pageTag.append("<input value=\"<\" style=\"margin-right: 10px; padding: 4px 8px; border-radius: 4px; background-color: #45a049; color: #FFF; font-weight: bold; border: none; cursor: pointer; font-size: 14px;\" ");
         pageTag.append("onclick=\"location.href='").append(contextPath);
         pageTag.append("/controller?command=").append(command);
+        pageTag.append("&search_text=").append(search_text);
         pageTag.append("&page=").append(page - 1).append("'\" ");
         if (page == 1) {
             pageTag.append("disabled style=\"background-color: #10a049; color: #888; cursor: not-allowed;\"");
@@ -52,6 +53,7 @@ public class BooksPagesTag extends TagSupport {
         pageTag.append("<input value=\">\" style=\"margin-left: 10px; padding: 4px 8px; border-radius: 4px; background-color: #45a049; color: #FFF; font-weight: bold; border: none; cursor: pointer; font-size: 14px;\" ");
         pageTag.append("onclick=\"location.href='").append(contextPath);
         pageTag.append("/controller?command=").append(command);
+        pageTag.append("&search_text=").append(search_text);
         pageTag.append("&page=").append(page + 1).append("'\" ");
         if (isLast) {
             pageTag.append("disabled style=\"background-color: #10a049; color: #888; cursor: not-allowed;\"");
