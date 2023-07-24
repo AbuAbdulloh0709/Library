@@ -39,4 +39,8 @@ public interface UserService {
 
     boolean changeUserStatus(int id, UserStatus userStatus) throws ServiceException;
 
+    int countStudents() throws ServiceException;
+
+    int countLibrarians() throws ServiceException;
+
 }

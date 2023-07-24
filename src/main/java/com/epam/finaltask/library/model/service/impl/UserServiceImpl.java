@@ -308,4 +308,32 @@ public class UserServiceImpl implements UserService {
             userDao.closeConnection();
         }
     }
+
+    @Override
+    public int countStudents() throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            return userDao.userCountsByRole(UserRole.STUDENT);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while counting students: " + exception);
+            throw new ServiceException("Error has occurred while counting students: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+    }
+
+    @Override
+    public int countLibrarians() throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        UserDao userDao = daoProvider.getUserDao(false);
+        try {
+            return userDao.userCountsByRole(UserRole.LIBRARIAN);
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while counting librarians: " + exception);
+            throw new ServiceException("Error has occurred while counting librarians: ", exception);
+        } finally {
+            userDao.closeConnection();
+        }
+    }
 }

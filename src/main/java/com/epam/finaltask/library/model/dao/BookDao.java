@@ -18,4 +18,6 @@ public abstract class BookDao extends BaseDao<Integer, Book> {
     abstract public List<Book> getBooksByGenreAndSearchQuery(int genre_id, String search_text, int startElementNumber) throws DaoException;
 
     abstract public List<Book> getBooks(int startElementNumber) throws DaoException;
+
+    abstract public int getBookCounts() throws DaoException;
 }

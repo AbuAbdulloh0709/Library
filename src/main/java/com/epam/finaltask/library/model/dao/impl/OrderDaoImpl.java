@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
-public class OrderDaoImpl extends OrderDao {
+ public class OrderDaoImpl extends OrderDao {
 
     private static final String SQL_INSERT_ORDER = "INSERT INTO orders(user_id, book_id, issue_date, return_date, usage_days, type) " +
             "values (?, ?, ?, ?, ?, ?)";
@@ -36,9 +36,15 @@ public class OrderDaoImpl extends OrderDao {
 
     private static final String SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%')";
 
+    private static final String SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY_AND_USER_ID = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%') and orders.order_user_id=?";
+
     private static final String SQL_SELECT_ORDER_HISTORY_BY_DATE = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (issue_date between ? and ?)";
 
+    private static final String SQL_SELECT_ORDER_HISTORY_BY_DATE_AND_USER_ID = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (issue_date between ? and ?) and orders.order_user_id=?";
+
     private static final String SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY_AND_DATE = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (issue_date between ? and ?) and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%')";
+
+    private static final String SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY_AND_DATE_AND_USER_ID = "SELECT * from view_orders as orders where (orders.last_status = 'returned' or orders.last_status = 'canceled') and (issue_date between ? and ?) and (first_name like '%' || ? || '%' or last_name like '%' || ? || '%' or title like '%' || ? || '%') and orders.order_user_id=?";
 
     public OrderDaoImpl() {
     }
@@ -124,21 +130,6 @@ public class OrderDaoImpl extends OrderDao {
         } catch (SQLException sqlException) {
             LOGGER.error("Error has occurred while finding orders: " + sqlException);
             throw new DaoException("Error has occurred while finding orders: ", sqlException);
-        }
-        return orders;
-    }
-
-    @Override
-    public List<Order> orderHistory(int startElementNumber) throws DaoException {
-        List<Order> orders;
-        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY)) {
-            preparedStatement.setInt(1, startElementNumber);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            OrderMapper bookMapper = OrderMapper.getInstance();
-            orders = bookMapper.retrieve(resultSet);
-        } catch (SQLException sqlException) {
-            LOGGER.error("Error has occurred while finding order history: " + sqlException);
-            throw new DaoException("Error has occurred while finding order history: ", sqlException);
         }
         return orders;
     }
@@ -245,7 +236,25 @@ public class OrderDaoImpl extends OrderDao {
         return orders;
     }
 
-    @Override
+     @Override
+     public List<Order> searchHistoryByQuery(int id, String searchQuery) throws DaoException {
+         List<Order> orders;
+         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY_AND_USER_ID)) {
+             preparedStatement.setString(1, searchQuery);
+             preparedStatement.setString(2, searchQuery);
+             preparedStatement.setString(3, searchQuery);
+             preparedStatement.setInt(4, id);
+             ResultSet resultSet = preparedStatement.executeQuery();
+             OrderMapper bookMapper = OrderMapper.getInstance();
+             orders = bookMapper.retrieve(resultSet);
+         } catch (SQLException sqlException) {
+             LOGGER.error("Error has occurred while finding order history by search query and order user id: " + sqlException);
+             throw new DaoException("Error has occurred while finding order history by search query and order user id: ", sqlException);
+         }
+         return orders;
+     }
+
+     @Override
     public List<Order> searchHistoryByDate(String from, String to) throws DaoException {
         List<Order> orders;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_BY_DATE)) {
@@ -261,7 +270,24 @@ public class OrderDaoImpl extends OrderDao {
         return orders;
     }
 
-    @Override
+     @Override
+     public List<Order> searchHistoryByDate(int id, String from, String to) throws DaoException {
+         List<Order> orders;
+         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_BY_DATE_AND_USER_ID)) {
+             preparedStatement.setDate(1, Date.valueOf(from));
+             preparedStatement.setDate(2, Date.valueOf(to));
+             preparedStatement.setInt(3, id);
+             ResultSet resultSet = preparedStatement.executeQuery();
+             OrderMapper bookMapper = OrderMapper.getInstance();
+             orders = bookMapper.retrieve(resultSet);
+         } catch (SQLException sqlException) {
+             LOGGER.error("Error has occurred while finding order history by date and user id: " + sqlException);
+             throw new DaoException("Error has occurred while finding order history by date and user id: ", sqlException);
+         }
+         return orders;
+     }
+
+     @Override
     public List<Order> searchHistoryByDateAndQuery(String from, String to, String search_text) throws DaoException {
         List<Order> orders;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY_AND_DATE)) {
@@ -279,4 +305,24 @@ public class OrderDaoImpl extends OrderDao {
         }
         return orders;
     }
-}
+
+     @Override
+     public List<Order> searchHistoryByDateAndQuery(int id, String from, String to, String search_text) throws DaoException {
+         List<Order> orders;
+         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ORDER_HISTORY_BY_SEARCH_QUERY_AND_DATE_AND_USER_ID)) {
+             preparedStatement.setDate(1, Date.valueOf(from));
+             preparedStatement.setDate(2, Date.valueOf(to));
+             preparedStatement.setString(3, search_text);
+             preparedStatement.setString(4, search_text);
+             preparedStatement.setString(5, search_text);
+             preparedStatement.setInt(6, id);
+             ResultSet resultSet = preparedStatement.executeQuery();
+             OrderMapper bookMapper = OrderMapper.getInstance();
+             orders = bookMapper.retrieve(resultSet);
+         } catch (SQLException sqlException) {
+             LOGGER.error("Error has occurred while finding order history by date and search query and user id: " + sqlException);
+             throw new DaoException("Error has occurred while finding order history by date and search query and user id: ", sqlException);
+         }
+         return orders;
+     }
+ }

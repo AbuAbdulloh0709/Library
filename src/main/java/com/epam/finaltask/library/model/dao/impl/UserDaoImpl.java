@@ -74,6 +74,8 @@ public class UserDaoImpl extends UserDao {
                     "  and status = ?\n" +
                     "LIMIT 15 OFFSET ?";
 
+    private static final String SQL_USER_COUNT_BY_ROLE = "Select count(*) as count from users where role = ?";
+
     private static final String SQL_CHANGE_USER_STATUS = "UPDATE users SET status = ? WHERE id = ?";
 
     public UserDaoImpl() {
@@ -318,7 +320,7 @@ public class UserDaoImpl extends UserDao {
     }
 
     @Override
-    public List<User> searchUsersByRoleAndStatus(UserRole role, UserStatus userStatus,int startElementNumber) throws DaoException {
+    public List<User> searchUsersByRoleAndStatus(UserRole role, UserStatus userStatus, int startElementNumber) throws DaoException {
         List<User> users;
         try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_USERS_BY_ROLE_AND_STATUS)) {
             preparedStatement.setString(1, role.getRole());
@@ -344,6 +346,22 @@ public class UserDaoImpl extends UserDao {
             LOGGER.error("Error has occurred while updating user status: " + exception);
             throw new DaoException("Error has occurred while updating user status: ", exception);
         }
+    }
+
+    @Override
+    public int userCountsByRole(UserRole userRole) throws DaoException {
+        int count = 0;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_USER_COUNT_BY_ROLE)) {
+            preparedStatement.setString(1, userRole.getRole());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (SQLException exception) {
+            LOGGER.error("Error has occurred while counting users by role: " + exception);
+            throw new DaoException("Error has occurred while counting users by role: ", exception);
+        }
+        return count;
     }
 
 

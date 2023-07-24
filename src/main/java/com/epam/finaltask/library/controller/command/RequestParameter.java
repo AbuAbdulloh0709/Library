@@ -65,4 +65,7 @@ public final class RequestParameter {
     public static final String FROM_DATE = "from_date";
     public static final String TO_DATE = "to_date";
     public static final String OLD_IMAGE_PATH = "image_path";
+    public static final String BOOK_COUNT = "book_count";
+    public static final String STUDENT_COUNT = "student_count";
+    public static final String LIBRARIAN_COUNT = "librarian_count";
 }

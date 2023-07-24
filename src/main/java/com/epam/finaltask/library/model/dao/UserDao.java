@@ -34,4 +34,5 @@ public abstract class UserDao extends BaseDao<Integer, User> {
 
     abstract public boolean changeUserStatus(int id, UserStatus status) throws DaoException;
 
+    abstract public int userCountsByRole(UserRole userRole) throws DaoException;
 }

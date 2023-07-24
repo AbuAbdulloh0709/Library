@@ -26,4 +26,5 @@ public interface BookService {
 
     Optional<Book> findById(int id) throws ServiceException;
 
+    int bookCounts() throws ServiceException;
 }

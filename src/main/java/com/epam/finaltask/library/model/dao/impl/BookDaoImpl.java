@@ -53,6 +53,8 @@ public class BookDaoImpl extends BookDao {
                     "join genres on books.genre_id = genres.id " +
                     "join book_available_copies bac on books.id = bac.book_id WHERE genres.id = ? and (title like '%' || ? || '%') LIMIT 15 OFFSET ?";
 
+    private static final String SQL_BOOK_COUNTS = "Select count(*) as count from books";
+
     public BookDaoImpl(boolean isTransaction) {
         if (!isTransaction) {
             connection = ConnectionPool.getInstance().getConnection();
@@ -208,5 +210,20 @@ public class BookDaoImpl extends BookDao {
             throw new DaoException("Error has occurred while finding books: ", sqlException);
         }
         return books;
+    }
+
+    @Override
+    public int getBookCounts() throws DaoException {
+        int count = 0;
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_BOOK_COUNTS)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } catch (SQLException sqlException) {
+            LOGGER.error("Error has occurred while finding books counts: " + sqlException);
+            throw new DaoException("Error has occurred while finding books counts: ", sqlException);
+        }
+        return count;
     }
 }

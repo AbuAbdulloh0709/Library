@@ -4,7 +4,7 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="pagecontent"/>
 <c:if test="${not empty message}">
-    <jsp:include page="/pages/admin/modal/modal.jsp"/>
+    <jsp:include page="/pages/modal/modal.jsp"/>
 </c:if>
 <header class="header-style">
 
@@ -14,42 +14,45 @@
     <div class="header-buttons">
         <a href="${pageContext.request.contextPath}/controller?command=sign_out" class="logout-button">Logout</a>
         <a href="${pageContext.request.contextPath}/controller?command=go_to_profile" class="profile-button">
-            <i class="fa fa-user-circle"></i> Profile
+            <i class="fa fa-user-circle"></i>${sessionScope.user.fullName}
         </a>
     </div>
 </header>
-    <style>
-        .header-style {
-            background-color: #35495e;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+<style>
+    .header-style {
+        background-color: #35495e;
+        color: #fff;
+        text-align: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        /*position: fixed;*/
+        /*padding: 20px;!important;*/
+        /*width: 100%;*/
+    }
 
-        .header-buttons {
-            display: flex;
-            align-items: center;
-        }
+    .header-buttons {
+        display: flex;
+        align-items: center;
+    }
 
-        .logout-button, .profile-button {
-            background-color: transparent;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            text-decoration: none; /* Remove underlines */
-        }
+    .logout-button, .profile-button {
+        background-color: transparent;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        padding-right: 20px;
+        text-decoration: none; /* Remove underlines */
+    }
 
-        .logout-button {
-            margin-right: 10px;
-        }
+    .logout-button {
+        margin-right: 10px;
+    }
 
-        .profile-button i {
-            margin-right: 5px;
-        }
-    </style>
+    .profile-button i {
+        margin-right: 5px;
+    }
+</style>

@@ -63,6 +63,6 @@
         </section>
     </div>
 </div>
-<jsp:include page="/pages/admin/modal/add_user.jsp"/>
+<jsp:include page="/pages/modal/add_user.jsp"/>
 </body>
 </html>

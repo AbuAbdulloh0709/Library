@@ -226,4 +226,18 @@ public class BookServiceImpl implements BookService {
             bookDao.closeConnection();
         }
     }
+
+    @Override
+    public int bookCounts() throws ServiceException {
+        DaoProvider daoProvider = DaoProvider.getInstance();
+        BookDao bookDao = daoProvider.getBookDao(false);
+        try {
+            return bookDao.getBookCounts();
+        } catch (DaoException exception) {
+            LOGGER.error("Error has occurred while finding a book by id: " + exception);
+            throw new ServiceException("Error has occurred while finding a book by id: ", exception);
+        } finally {
+            bookDao.closeConnection();
+        }
+    }
 }

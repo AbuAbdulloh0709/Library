@@ -1,13 +1,15 @@
 package com.epam.finaltask.library.controller.command.impl.signing;
 
-import com.epam.finaltask.library.controller.command.Command;
-import com.epam.finaltask.library.controller.command.PagePath;
-import com.epam.finaltask.library.controller.command.Router;
-import com.epam.finaltask.library.controller.command.SessionAttribute;
+import com.epam.finaltask.library.controller.command.*;
+import com.epam.finaltask.library.controller.command.impl.go_to.GoToBooksToIssueCommand;
+import com.epam.finaltask.library.controller.command.impl.go_to.GoToDashboardCommand;
 import com.epam.finaltask.library.entity.User;
+import com.epam.finaltask.library.entity.enums.UserRole;
 import com.epam.finaltask.library.entity.enums.UserStatus;
 import com.epam.finaltask.library.exception.ServiceException;
+import com.epam.finaltask.library.model.service.BookService;
 import com.epam.finaltask.library.model.service.UserService;
+import com.epam.finaltask.library.model.service.impl.BookServiceImpl;
 import com.epam.finaltask.library.model.service.impl.UserServiceImpl;
 import com.epam.finaltask.library.util.PhoneNumberFormatter;
 import jakarta.servlet.ServletContext;
@@ -28,6 +30,7 @@ public class SignInCommand implements Command {
     private static final String USER_BLOCKED_MESSAGE = "error.blocked";
     private static final String USER_INACTIVE_MESSAGE = "error.inactive";
     private final UserService userService = UserServiceImpl.getInstance();
+    private final BookService bookService = BookServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -54,7 +57,11 @@ public class SignInCommand implements Command {
                     request.setAttribute(MESSAGE, USER_INACTIVE_MESSAGE);
                     return new Router(PagePath.SIGN_IN, Router.RouterType.FORWARD);
                 }
-                return new Router(PagePath.DASHBOARD, Router.RouterType.REDIRECT);
+                if (user.get().getRole().equals(UserRole.STUDENT)) {
+                    return new GoToBooksToIssueCommand().execute(request);
+                } else {
+                    return new GoToDashboardCommand().execute(request);
+                }
             } else {
                 request.setAttribute(USER_LOGIN, login);
                 request.setAttribute(USER_PASSWORD, password);
